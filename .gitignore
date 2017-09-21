@@ -1,0 +1,6 @@
+.vagrant
+*.pyc
+config.py
+json/*.txt
+mail_templates/*.txt
+!mail_templates/notification_template.txt
