@@ -119,15 +119,16 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.TestCaseFileName = "test_case_file_name"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         self.CompareObject = {"title": "test_case_file_name", "link": "http://test/case/link/", "name": "test_case_file_name", "id": "934137d0dfea14f33fbfbdaa1b8af030", "dismissed": False, "summary": "summary!"}
+        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
 
     def tearDown(self):
-        if os.path.isfile(self.JSONDIR + self.TestCaseFileName):
-            os.remove(self.JSONDIR + self.TestCaseFileName)
+        if os.path.isfile(self.FullFilePath):
+            os.remove(self.FullFilePath)
 
     def test_object_is_saved(self):
         rss.save_object_as_json_to_disk(self.Object, self.TestCaseFileName)
 
-        with open(self.JSONDIR + self.TestCaseFileName, "r+") as TestCaseFile:
+        with open(self.FullFilePath, "r+") as TestCaseFile:
             TestCaseFileObject = json.load(TestCaseFile)
             TestCaseFile.close()
 
@@ -136,7 +137,7 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
     def test_empty_object_is_not_saved(self):
         rss.save_object_as_json_to_disk(self.EmptyObject, self.TestCaseFileName)
 
-        Result = os.path.isfile(self.JSONDIR + self.TestCaseFileName)
+        Result = os.path.isfile(self.FullFilePath)
 
         self.assertEqual(False, Result)
 
@@ -146,17 +147,18 @@ class TestSetNotificationAsDismissed(unittest.TestCase):
     def setUp(self):
         self.JSONDIR = rss.JSONDIR
         self.TestCaseFileName = "test_case_file_name"
+        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         rss.save_object_as_json_to_disk(self.Object, self.TestCaseFileName)
 
     def tearDown(self):
-        if os.path.isfile(self.JSONDIR + self.TestCaseFileName):
-            os.remove(self.JSONDIR + self.TestCaseFileName)
+        if os.path.isfile(self.FullFilePath):
+            os.remove(self.FullFilePath)
 
     def test_dismissed_is_set_to_true(self):
         rss.set_notification_as_dismissed(self.TestCaseFileName)
 
-        with open(self.JSONDIR + self.TestCaseFileName, "r") as JsonFile:
+        with open(self.FullFilePath, "r") as JsonFile:
             JsonObject = json.load(JsonFile)
             DismissedValue = JsonObject["dismissed"]
             JsonFile.close()
@@ -169,13 +171,14 @@ class TestCompareNotificationID(unittest.TestCase):
     def setUp(self):
         self.JSONDIR = rss.JSONDIR
         self.TestCaseFileName = "test_case_file_name"
+        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         self.CompareObject = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         rss.save_object_as_json_to_disk(self.Object, self.TestCaseFileName)
 
     def tearDown(self):
-        if os.path.isfile(self.JSONDIR + self.TestCaseFileName):
-            os.remove(self.JSONDIR + self.TestCaseFileName)
+        if os.path.isfile(self.FullFilePath):
+            os.remove(self.FullFilePath)
 
     def test_returns_false_when_id_matches(self):
         Result = rss.compare_notification_id(self.TestCaseFileName, self.CompareObject)
@@ -189,8 +192,8 @@ class TestCompareNotificationID(unittest.TestCase):
         self.assertEqual(Result, True)
 
     def test_returns_true_when_file_does_not_exist(self):
-        if os.path.isfile(self.JSONDIR + self.TestCaseFileName):
-            os.remove(self.JSONDIR + self.TestCaseFileName)
+        if os.path.isfile(self.FullFilePath):
+            os.remove(self.FullFilePath)
 
         Result = rss.compare_notification_id(self.TestCaseFileName, self.CompareObject)
 

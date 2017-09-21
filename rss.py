@@ -46,12 +46,13 @@ def save_object_as_json_to_disk(Object, Name):
         Object["dismissed"] = False
         Object["name"] = Name
         Object["id"] = md5(str(Object)).hexdigest()
-        with open(JSONDIR + Name, "w") as SaveFile:
+        with open(JSONDIR + Name + ".json", "w") as SaveFile:
             json.dump(Object, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
 
 def set_notification_as_dismissed(File):
-    with open(JSONDIR + File, "r+") as JsonFile:
+    FullFilePath = JSONDIR + File +".json"
+    with open(FullFilePath, "r+") as JsonFile:
         JsonObject = json.load(JsonFile)
         JsonFile.seek(0)
         JsonFile.truncate()
@@ -61,8 +62,9 @@ def set_notification_as_dismissed(File):
 
 
 def compare_notification_id(File, Object):
-    if os.path.isfile(JSONDIR + File):
-        with open(JSONDIR + File, "r") as JsonFile:
+    FullFilePath = JSONDIR + File +".json"
+    if os.path.isfile(FullFilePath):
+        with open(FullFilePath, "r") as JsonFile:
             JsonObject = json.load(JsonFile)
             JsonFile.close()
 
@@ -79,8 +81,9 @@ def compare_notification_id(File, Object):
 
 
 def load_notification_object(File):
-    if os.path.isfile(JSONDIR + File):
-        with open(JSONDIR + File, "r") as JsonFile:
+    FullFilePath = JSONDIR + File +".json"
+    if os.path.isfile(FullFilePath):
+        with open(FullFilePath, "r") as JsonFile:
             JsonObject = json.load(JsonFile)
             JsonFile.close()
 
