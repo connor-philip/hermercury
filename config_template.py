@@ -6,10 +6,10 @@ emailConfig = {
 }
 NotificationConfigs = [
     {
-    "name": "name of the notification. User defined",
-    "feed": "feed url",
-    "search": "search string or index int",
-    "storeList": ["keys", "to", "store"],
-    "mailTemplate": "notification_template.txt"
+        "name": "hermercury github",
+        "feed": "https://github.com/connor-philip/hermercury/commits/master.atom",
+        "search": 0,
+        "storeList": ["author", "link"],
+        "mailTemplate": "hermercury_example.txt"
     }
 ]

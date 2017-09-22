@@ -1,0 +1,1 @@
+New commit by {{author}} at {{link}}

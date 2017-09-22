@@ -3,4 +3,4 @@
 config.py
 json/*.json
 mail_templates/*.txt
-!mail_templates/notification_template.txt
+!mail_templates/hermercury_example.txt
