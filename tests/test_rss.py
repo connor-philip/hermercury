@@ -142,30 +142,6 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.assertEqual(False, Result)
 
 
-class TestSetNotificationAsDismissed(unittest.TestCase):
-
-    def setUp(self):
-        self.JSONDIR = rss.JSONDIR
-        self.TestCaseFileName = "test_case_file_name"
-        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
-        self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
-        rss.save_object_as_json_to_disk(self.Object, self.TestCaseFileName)
-
-    def tearDown(self):
-        if os.path.isfile(self.FullFilePath):
-            os.remove(self.FullFilePath)
-
-    def test_dismissed_is_set_to_true(self):
-        rss.set_notification_as_dismissed(self.TestCaseFileName)
-
-        with open(self.FullFilePath, "r") as JsonFile:
-            JsonObject = json.load(JsonFile)
-            DismissedValue = JsonObject["dismissed"]
-            JsonFile.close()
-
-        self.assertEqual(True, DismissedValue)
-
-
 class TestCompareNotificationID(unittest.TestCase):
 
     def setUp(self):
