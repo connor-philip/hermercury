@@ -43,7 +43,6 @@ def create_object_with_wanted_parameters(OriginalObject, KeyList):
 
 def save_object_as_json_to_disk(Object, Name):
     if Object:
-        Object["dismissed"] = False
         Object["name"] = Name
         Object["id"] = md5(str(Object)).hexdigest()
         with open(JSONDIR + Name + ".json", "w") as SaveFile:
@@ -57,7 +56,6 @@ def compare_notification_id(File, Object):
             JsonObject = json.load(JsonFile)
             JsonFile.close()
 
-            Object["dismissed"] = False
             Object["name"] = File
             Object["id"] = md5(str(Object)).hexdigest()
 
