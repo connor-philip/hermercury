@@ -1,6 +1,6 @@
 # Set environment variable
-echo "export PYTHONPATH=/home/vagrant/hermercury" >> /home/vagrant/.bashrc
-source /home/vagrant/.bashrc
+echo "export PYTHONPATH=/var/hermercury" >> /var/.bashrc
+source /var/.bashrc
 
 
 # Install python, pip, and python modules
@@ -13,5 +13,5 @@ pip install feedparser
 
 
 # Setup the cron
-chmod +x /home/vagrant/hermercury/main.py
-crontab /home/vagrant/hermercury/environment/hermercury_crontab
+chmod +x /var/hermercury/main.py
+crontab /var/hermercury/environment/hermercury_crontab

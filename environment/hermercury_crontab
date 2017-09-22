@@ -1,1 +1,1 @@
-*/1 * * * * python /home/vagrant/hermercury/main.py
+*/1 * * * * python /var/hermercury/main.py
