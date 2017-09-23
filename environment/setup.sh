@@ -1,6 +1,12 @@
+PROJECTDIR=/var/hermercury
+
 # Set environment variable
 echo "export PYTHONPATH=/var/hermercury" >> /var/.bashrc
 source /var/.bashrc
+
+
+# Create config from config_template if config.py does not already exist
+ls $PROJECTDIR | grep config.py || cp $PROJECTDIR/config_template.py $PROJECTDIR/config.py
 
 
 # Install python, pip, and python modules
@@ -13,5 +19,5 @@ pip install feedparser
 
 
 # Setup the cron
-chmod +x /var/hermercury/main.py
-crontab /var/hermercury/environment/hermercury_crontab
+chmod +x $PROJECTDIR/main.py
+crontab $PROJECTDIR/environment/hermercury_crontab
