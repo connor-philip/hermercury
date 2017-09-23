@@ -1,8 +1,8 @@
 emailConfig = {
-    "senderAddress": "email to send from",
-    "senderAddressPassword": "password of email to send from",
-    "mailServer": "mail server to connect to for the sender email",
-    "targetAddress": "email to notify to"
+    "senderAddress": "",
+    "senderAddressPassword": "",
+    "mailServer": "",
+    "targetAddress": ""
 }
 NotificationConfigs = [
     {
