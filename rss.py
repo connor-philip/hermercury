@@ -57,9 +57,9 @@ def compare_notification_id(File, Object):
             JsonFile.close()
 
             Object["name"] = File
-            Object["id"] = md5(str(Object)).hexdigest()
+            CompareId = md5(str(Object)).hexdigest()
 
-            if Object["id"] == JsonObject["id"]:
+            if CompareId == JsonObject["id"]:
                 return False
             else:
                 return True
