@@ -17,4 +17,4 @@ There is already a setup notification config along with it's mail template ready
 | senderAddress | email the notification is sent from | hermercurynotify@gmail.com |
 | senderAddressPassword | password of email the notification is sent from | SuperSecurePassword123! |
 | mailServer | mail server to connect to for the sender email with the port | smtp.gmail.com:587 |
-| targetAddress | email to notify to, can be the same address as the senderAddress, or different | myemail@example.com |
+| targetAddress | email to notify to, can be the same address as the senderAddress, or different. Can be an array of emails | myemail@example.com |
