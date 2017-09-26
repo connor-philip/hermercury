@@ -1,4 +1,4 @@
-PROJECTDIR=/var/hermercury
+PROJECTDIR=/usr/local/hermercury
 
 # Set environment variable
 echo "export PYTHONPATH=$PROJECTDIR" >> /var/.bashrc

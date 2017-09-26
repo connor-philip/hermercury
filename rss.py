@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-JSONDIR = "/var/hermercury/json/"
+JSONDIR = "/usr/local/hermercury/json/"
 
 
 def open_feed(FeedHost):

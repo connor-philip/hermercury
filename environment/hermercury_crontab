@@ -1,1 +1,1 @@
-*/30 * * * * python /var/hermercury/main.py
+*/30 * * * * python /usr/local/hermercury/main.py

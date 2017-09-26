@@ -7,7 +7,7 @@ SENDERADDRESSPASSWORD = emailConfig["senderAddressPassword"]
 MAILSERVER = emailConfig["mailServer"]
 TARGETADDRESS = emailConfig["targetAddress"]
 
-MAILTEMPLATEDIR = "/var/hermercury/mail_templates/"
+MAILTEMPLATEDIR = "/usr/local/hermercury/mail_templates/"
 
 dictionary = {"title": "this is the title", "link": "this is the link"}
 
