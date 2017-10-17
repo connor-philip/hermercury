@@ -1,6 +1,8 @@
 from config import NotificationConfigs
 import rss
 import notify
+import schedule
+import time
 
 
 class Notification:
@@ -26,9 +28,19 @@ class Notification:
         notify.send_email(Email)
 
 
-# Main loop
-for NotificationConfig in NotificationConfigs:
+def notification_schedule():
+  print("Notification Scheduled Task Triggered...")
+  for NotificationConfig in NotificationConfigs:
     Instance = Notification(NotificationConfig)
     Instance.search_for_notification()
     if Instance.Entry and Instance.NotificationPending:
         Instance.send_notification()
+
+
+print("Hermercury RSS Notification Engine")
+print("Schedule running every 15 minutes")
+schedule.every(15).minutes.do(notification_schedule)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
