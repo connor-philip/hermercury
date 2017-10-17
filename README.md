@@ -5,11 +5,20 @@ A program used to search RSS feeds and send email notifications.
 -----
 
 
-### Setup
-Most of the setup required to run will be done by the [setup.sh](https://github.com/connor-philip/hermercury/blob/master/environment/setup.sh) file. You can run this in the [vagrant](https://www.vagrantup.com/intro/getting-started/up.html) environment provided, by using `vagrant up` in the project directory.
-To run this in a local environment instead, run `sudo sh /usr/local/hermercury/environment/setup.sh`
+## Setup
 
-### Config
+### Build
+docker built -t hermercury:latest .
+docker run -d --name hermecury hermercury:latest
+
+### Dockerhub
+docker run -d --name -v ./config.py:/app/config.py affixxx/hermercury:latest
+
+### Python Locally
+$ pip install -r requirements.txt
+$ python main.py
+
+## Config
 There is already a setup notification config along with it's mail template ready to use, however some manual configuration that you need to setup is the emailConfig section of the config.
 
 |Key | Description | Example |
