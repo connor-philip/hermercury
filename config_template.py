@@ -1,3 +1,4 @@
+ProjectDir = "/usr/local/hermercury"
 emailConfig = {
     "senderAddress": "",
     "senderAddressPassword": "",

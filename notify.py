@@ -1,13 +1,13 @@
+from config import emailConfig, ProjectDir
 import smtplib
 import re
-from config import emailConfig
 
 SENDERADDRESS = emailConfig["senderAddress"]
 SENDERADDRESSPASSWORD = emailConfig["senderAddressPassword"]
 MAILSERVER = emailConfig["mailServer"]
 TARGETADDRESS = emailConfig["targetAddress"]
 
-MAILTEMPLATEDIR = "/usr/local/hermercury/mail_templates/"
+MAILTEMPLATEDIR = ProjectDir + "/mail_templates/"
 
 dictionary = {"title": "this is the title", "link": "this is the link"}
 

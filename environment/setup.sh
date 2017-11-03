@@ -1,4 +1,6 @@
-PROJECTDIR=/usr/local/hermercury
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECTDIR="$(dirname "$scriptdir")"
+# PROJECTDIR=/usr/local/hermercury
 
 # Set environment variable
 echo "export PYTHONPATH=$PROJECTDIR" >> /var/.bashrc

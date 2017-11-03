@@ -1,10 +1,11 @@
+from config import ProjectDir
 from hashlib import md5
 import feedparser
 import json
 import os
 import re
 
-JSONDIR = "/usr/local/hermercury/json/"
+JSONDIR = ProjectDir + "/json/"
 
 
 def open_feed(FeedHost):
