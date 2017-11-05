@@ -1,4 +1,4 @@
-from config import emailConfig, ProjectDir
+from config import emailConfig
 import smtplib
 import re
 
@@ -7,13 +7,11 @@ SENDERADDRESSPASSWORD = emailConfig["senderAddressPassword"]
 MAILSERVER = emailConfig["mailServer"]
 TARGETADDRESS = emailConfig["targetAddress"]
 
-MAILTEMPLATEDIR = ProjectDir + "/mail_templates/"
-
 dictionary = {"title": "this is the title", "link": "this is the link"}
 
 
 def build_notification_email(subject, mailTemplate, variableStore):
-    with open(MAILTEMPLATEDIR + mailTemplate, "r") as mailBodyTemplateFile:
+    with open(mailTemplate, "r") as mailBodyTemplateFile:
         mailBody = str(mailBodyTemplateFile.read())
         mailBodyTemplateFile.close()
 

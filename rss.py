@@ -1,11 +1,8 @@
-from config import ProjectDir
 from hashlib import md5
 import feedparser
 import json
 import os
 import re
-
-JSONDIR = ProjectDir + "/json/"
 
 
 def open_feed(FeedHost):
@@ -42,22 +39,22 @@ def create_object_with_wanted_parameters(OriginalObject, KeyList):
     return StoreObject
 
 
-def save_object_as_json_to_disk(Object, Name):
+def save_object_as_json_to_disk(Object, File, Name):
     if Object:
         Object["name"] = Name
         Object["id"] = md5(str(Object)).hexdigest()
-        with open(JSONDIR + Name + ".json", "w") as SaveFile:
+        with open(File, "w") as SaveFile:
             json.dump(Object, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
 
-def compare_notification_id(File, Object):
-    FullFilePath = JSONDIR + File + ".json"
+def compare_notification_id(File, Name, Object):
+    FullFilePath = File
     if os.path.isfile(FullFilePath):
         with open(FullFilePath, "r") as JsonFile:
             JsonObject = json.load(JsonFile)
             JsonFile.close()
 
-            Object["name"] = File
+            Object["name"] = Name
             CompareId = md5(str(Object)).hexdigest()
 
             if CompareId == JsonObject["id"]:
@@ -69,9 +66,8 @@ def compare_notification_id(File, Object):
 
 
 def load_notification_object(File):
-    FullFilePath = JSONDIR + File + ".json"
-    if os.path.isfile(FullFilePath):
-        with open(FullFilePath, "r") as JsonFile:
+    if os.path.isfile(File):
+        with open(File, "r") as JsonFile:
             JsonObject = json.load(JsonFile)
             JsonFile.close()
 
