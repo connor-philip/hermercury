@@ -4,6 +4,11 @@ import os
 import unittest
 
 
+CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
+PROJECTDIR = os.path.abspath(os.path.join(CURRENTDIR, os.pardir))
+JSONDIR = os.path.join(PROJECTDIR, "json")
+
+
 class TestFindEntryByTitle(unittest.TestCase):
 
     def setUp(self):
@@ -114,12 +119,12 @@ class TestCreateObjectWithWantedParameters(unittest.TestCase):
 class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 
     def setUp(self):
-        self.JSONDIR = "/usr/local/hermercury/json/"
+        self.jsonDir = JSONDIR
         self.EmptyObject = {}
         self.TestCaseFileName = "test_case_file_name"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         self.CompareObject = {"title": "test_case_file_name", "link": "http://test/case/link/", "name": "test_case_file_name", "id": "89d6f3d486d2b5206720fd00f4538768", "summary": "summary!"}
-        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
+        self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
     def tearDown(self):
         if os.path.isfile(self.FullFilePath):
@@ -145,9 +150,9 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 class TestCompareNotificationID(unittest.TestCase):
 
     def setUp(self):
-        self.JSONDIR = "/usr/local/hermercury/json/"
+        self.jsonDir = JSONDIR
         self.TestCaseFileName = "test_case_file_name"
-        self.FullFilePath = self.JSONDIR + self.TestCaseFileName + ".json"
+        self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         self.CompareObject = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
         rss.save_object_as_json_to_disk(self.Object, self.FullFilePath, self.TestCaseFileName)
