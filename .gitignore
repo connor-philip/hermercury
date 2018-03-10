@@ -1,6 +1,7 @@
 .vagrant
 *.pyc
 config.py
+hermercury.pid
 json/*.json
 mail_templates/*.txt
 !mail_templates/hermercury_example.txt
