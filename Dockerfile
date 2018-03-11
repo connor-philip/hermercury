@@ -1,5 +1,4 @@
-# FROM python:2.7-slim
-FROM ubuntu:16.04
+FROM python:2.7-stretch
 LABEL maintainer="connor.philip12@hotmail.com"
 
 USER root
@@ -7,11 +6,6 @@ USER root
 WORKDIR /app
 ENV PYTHONPATH /app
 
-RUN apt-get update && apt-get -y install \
-python \
-python-pip
-
-RUN pip install --upgrade pip
 RUN pip install feedparser
 RUN pip install psutil
 
