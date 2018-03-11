@@ -4,10 +4,10 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 echo $DIR
 
 if [[ $1 == "build" ]]; then
-    docker build -t vmc_tests $DIR
+    docker build -t hermercury_tests $DIR
 fi
 
-docker run -l hermercury_tests_container -v $DIR:/app vmc_tests
+docker run -l hermercury_tests_container -v $DIR:/app hermercury_tests
 
 
 if [[ $? == 0 ]]; then
