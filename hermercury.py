@@ -74,14 +74,17 @@ def stop_background_process(args):
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
+startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly")
 startParser.set_defaults(commandFunction=start_background_process)
 
 stopParser = subparsers.add_parser("stop", help="Stops Hermercury")
-stopParser.set_defaults(commandFunction=stop_background_process, foreground=False)
+stopParser.set_defaults(commandFunction=stop_background_process, foreground=False, onceNow=False)
 
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.foreground:
         start_scheduler(args)
+    elif args.onceNow:
+        main()
     else:
         args.commandFunction(args)
