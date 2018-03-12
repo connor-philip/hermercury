@@ -1,4 +1,4 @@
-from config import emailConfig
+from modules.helper_functions import read_config
 from modules import notify
 import unittest
 import os
@@ -7,6 +7,7 @@ import os
 CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
 PROJECTDIR = os.path.abspath(os.path.join(CURRENTDIR, os.pardir))
 MAILTEMPLATEDIR = os.path.join(PROJECTDIR, "mail_templates")
+emailConfig = read_config()["emailConfig"]
 
 
 class TestBuildNotificationEmail(unittest.TestCase):
@@ -31,10 +32,10 @@ class TestBuildNotificationEmail(unittest.TestCase):
 
         self.assertEqual(expectedEmail, emailResult)
 
-    def test_function_returns_string(self):
+    def test_function_returns_unicode(self):
         emailResult = notify.build_notification_email("subject", self.mailTemplateFilePath, {})
 
-        self.assertIsInstance(emailResult, str)
+        self.assertIsInstance(emailResult, unicode)
 
     def test_variables_in_double_curly_bracks_are_replaced(self):
         emailResult = notify.build_notification_email("subject", self.mailTemplateFilePath, self.variableStore)

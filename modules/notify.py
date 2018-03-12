@@ -1,6 +1,8 @@
-from config import emailConfig
+from modules.helper_functions import read_config
 import smtplib
 import re
+
+emailConfig = read_config()["emailConfig"]
 
 SENDERADDRESS = emailConfig["senderAddress"]
 SENDERADDRESSPASSWORD = emailConfig["senderAddressPassword"]

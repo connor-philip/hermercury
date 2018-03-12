@@ -1,7 +1,7 @@
 from modules.process_control import ProcessControl
-from modules import rss
+from modules.helper_functions import read_config
 from modules import notify
-from config import NotificationConfigs
+from modules import rss
 import schedule
 import argparse
 import time
@@ -10,6 +10,9 @@ import os
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
+
+NotificationConfigs = read_config()["NotificationConfigs"]
+
 parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
 
