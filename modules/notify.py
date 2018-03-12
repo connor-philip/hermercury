@@ -21,7 +21,7 @@ def build_notification_email(subject, mailTemplate, variableStore):
         if key in variableStore:
             mailBody = re.sub(match, variableStore[key], mailBody)
 
-    email = "From: %s\nTo: %s\nSubject: %s\n\n%s" % (SENDERADDRESS, TARGETADDRESS, subject, mailBody)
+    email = "From: {}\nTo: {}\nSubject: {}\n\n{}".format(SENDERADDRESS, TARGETADDRESS, subject, mailBody)
 
     return email
 

@@ -32,10 +32,10 @@ class TestBuildNotificationEmail(unittest.TestCase):
 
         self.assertEqual(expectedEmail, emailResult)
 
-    def test_function_returns_unicode(self):
+    def test_function_returns_str(self):
         emailResult = notify.build_notification_email("subject", self.mailTemplateFilePath, {})
 
-        self.assertIsInstance(emailResult, unicode)
+        self.assertIsInstance(emailResult, str)
 
     def test_variables_in_double_curly_bracks_are_replaced(self):
         emailResult = notify.build_notification_email("subject", self.mailTemplateFilePath, self.variableStore)
