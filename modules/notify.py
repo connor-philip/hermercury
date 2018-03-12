@@ -9,8 +9,6 @@ SENDERADDRESSPASSWORD = emailConfig["senderAddressPassword"]
 MAILSERVER = emailConfig["mailServer"]
 TARGETADDRESS = emailConfig["targetAddress"]
 
-dictionary = {"title": "this is the title", "link": "this is the link"}
-
 
 def build_notification_email(subject, mailTemplate, variableStore):
     with open(mailTemplate, "r") as mailBodyTemplateFile:
