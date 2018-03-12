@@ -1,10 +1,11 @@
+from modules.process_control import ProcessControl
+from modules import rss
+from modules import notify
 from config import NotificationConfigs
-from process_control import ProcessControl
 import schedule
 import argparse
-import notify
 import time
-import rss
+import sys
 import os
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
@@ -58,11 +59,13 @@ def start_scheduler(args):
 
 def start_background_process(args):
     frequency = str(args.frequency)
-    ProcessControl(PIDFILE).create_process(["python", os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
+    userMessage = ProcessControl(PIDFILE).create_process(["python", os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
+    sys.stdout.write("{}\n".format(userMessage))
 
 
 def stop_background_process(args):
-    ProcessControl(PIDFILE).stop_process()
+    userMessage = ProcessControl(PIDFILE).stop_process()
+    sys.stdout.write("{}\n".format(userMessage))
 
 
 startParser = subparsers.add_parser("start", help="Starts Hermercury")

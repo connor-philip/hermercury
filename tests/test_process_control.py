@@ -1,4 +1,4 @@
-from process_control import ProcessControl
+from modules.process_control import ProcessControl
 import unittest
 import json
 import os

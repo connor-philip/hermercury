@@ -1,4 +1,4 @@
-import rss
+from modules import rss
 import json
 import os
 import unittest

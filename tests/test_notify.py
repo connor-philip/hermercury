@@ -1,7 +1,7 @@
-import os
-import unittest
 from config import emailConfig
-import notify
+from modules import notify
+import unittest
+import os
 
 
 CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
