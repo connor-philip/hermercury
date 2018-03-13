@@ -5,7 +5,7 @@
         "mailServer": "",
         "targetAddress": ""
     },
-    "NotificationConfigs": [
+    "notificationConfigs": [
         {
             "name": "hermercury github",
             "feed": "https://github.com/connor-philip/hermercury/commits/master.atom",

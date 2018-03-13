@@ -1,6 +1,6 @@
 from modules.process_control import ProcessControl
 from modules.helper_functions import read_config
-from modules import notify
+from modules.notify import EmailControl
 from modules import rss
 import schedule
 import argparse
@@ -11,7 +11,9 @@ import os
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
-NotificationConfigs = read_config()["NotificationConfigs"]
+configs = read_config()
+notificationConfigs = configs["notificationConfigs"]
+emailConfig = configs["emailConfig"]
 
 parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
@@ -19,35 +21,41 @@ subparsers = parser.add_subparsers(help='sub-command help')
 
 class Notification:
 
-    def __init__(self, NotificationConfig):
-            self.Name = NotificationConfig["name"]
-            self.Feed = NotificationConfig["feed"]
-            self.Search = NotificationConfig["search"]
-            self.StoreList = NotificationConfig["storeList"]
-            self.MailTemplate = NotificationConfig["mailTemplate"]
+    def __init__(self, notificationConfig, emailConfig):
+            self.name = notificationConfig["name"]
+            self.feed = notificationConfig["feed"]
+            self.search = notificationConfig["search"]
+            self.storeList = notificationConfig["storeList"]
+            self.mailTemplate = notificationConfig["mailTemplate"]
 
-            self.FullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, self.Name)
-            self.FullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.MailTemplate)
+            self.senderAddress = emailConfig["senderAddress"]
+            self.senderAddressPassword = emailConfig["senderAddressPassword"]
+            self.mailServer = emailConfig["mailServer"]
+            self.targetAddress = emailConfig["targetAddress"]
+
+            self.fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, self.name)
+            self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
 
     def search_for_notification(self):
-        FeedContent = rss.open_feed(self.Feed)
-        self.Entry = rss.search_method_switch(FeedContent, self.Search)
-        Object = rss.create_object_with_wanted_parameters(self.Entry, self.StoreList)
-        self.NotificationPending = rss.compare_notification_id(self.FullJsonFilePath, self.Name, Object)
-        if self.Entry and self.NotificationPending:
-            rss.save_object_as_json_to_disk(Object, self.FullJsonFilePath, self.Name)
-            self.NotificationObject = rss.load_notification_object(self.FullJsonFilePath)
+        feedContent = rss.open_feed(self.feed)
+        self.entry = rss.search_method_switch(feedContent, self.search)
+        dictObject = rss.create_object_with_wanted_parameters(self.entry, self.storeList)
+        self.notificationPending = rss.compare_notification_id(self.fullJsonFilePath, self.name, dictObject)
+        if self.entry and self.notificationPending:
+            rss.save_object_as_json_to_disk(dictObject, self.fullJsonFilePath, self.name)
+            self.notificationObject = rss.load_notification_object(self.fullJsonFilePath)
 
     def send_notification(self):
-        Email = notify.build_notification_email(self.Name, self.FullMailTemplateFilePath, self.NotificationObject)
-        notify.send_email(Email)
+        EmailControlInstance = EmailControl(self.senderAddress, self.senderAddressPassword, self.mailServer, self.targetAddress)
+        email = EmailControlInstance.build_notification_email(self.name, self.fullMailTemplateFilePath, self.notificationObject)
+        EmailControlInstance.send_email(email)
 
 
 def main():
-    for NotificationConfig in NotificationConfigs:
-        Instance = Notification(NotificationConfig)
+    for notificationConfig in notificationConfigs:
+        Instance = Notification(notificationConfig, emailConfig)
         Instance.search_for_notification()
-        if Instance.Entry and Instance.NotificationPending:
+        if Instance.entry and Instance.notificationPending:
             Instance.send_notification()
 
 
