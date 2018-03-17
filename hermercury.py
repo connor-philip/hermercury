@@ -1,7 +1,7 @@
 from modules.process_control import ProcessControl
 from modules.helper_functions import read_config
 from modules.notify import EmailControl
-from modules import rss
+from modules.rss import RSS
 import schedule
 import argparse
 import time
@@ -37,13 +37,12 @@ class Notification:
             self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
 
     def search_for_notification(self):
-        feedContent = rss.open_feed(self.feed)
-        self.entry = rss.search_method_switch(feedContent, self.search)
-        dictObject = rss.create_object_with_wanted_parameters(self.entry, self.storeList)
-        self.notificationPending = rss.compare_notification_id(self.fullJsonFilePath, self.name, dictObject)
+        RSSInstance = RSS(self.feed)
+        RSSInstance.search_for_notification(self.name, self.search, self.storeList, self.fullJsonFilePath)
+        self.entry = RSSInstance.entry
+        self.notificationPending = RSSInstance.notificationPending
         if self.entry and self.notificationPending:
-            rss.save_object_as_json_to_disk(dictObject, self.fullJsonFilePath, self.name)
-            self.notificationObject = rss.load_notification_object(self.fullJsonFilePath)
+            self.notificationObject = RSSInstance.notificationObject
 
     def send_notification(self):
         EmailControlInstance = EmailControl(self.senderAddress, self.senderAddressPassword, self.mailServer, self.targetAddress)
