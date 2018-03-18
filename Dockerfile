@@ -1,4 +1,4 @@
-FROM python:2.7-stretch
+FROM python:3.6-stretch
 LABEL maintainer="connor.philip12@hotmail.com"
 
 USER root

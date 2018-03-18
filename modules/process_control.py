@@ -27,7 +27,7 @@ class ProcessControl:
     def create_pid_data(self, pid):
         processObj = psutil.Process(pid)
         creationTime = processObj.create_time()
-        cid = md5(str(pid) + str(creationTime)).hexdigest()
+        cid = md5(str(pid).encode("utf-8") + str(creationTime).encode("utf-8")).hexdigest()
 
         pidData = {
             "pid": pid,

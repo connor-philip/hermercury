@@ -40,7 +40,7 @@ class RSS:
     def save_object_as_json_to_disk(self, dictionaryObject, file, name):
         if dictionaryObject:
             dictionaryObject["name"] = name
-            dictionaryObject["id"] = md5(str(dictionaryObject)).hexdigest()
+            dictionaryObject["id"] = md5(str(dictionaryObject).encode("utf-8")).hexdigest()
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -52,7 +52,7 @@ class RSS:
                 jsonFile.close()
 
                 dictionaryObject["name"] = name
-                compareId = md5(str(dictionaryObject)).hexdigest()
+                compareId = md5(str(dictionaryObject).encode("utf-8")).hexdigest()
 
                 if compareId == jsonObject["id"]:
                     return False
@@ -70,7 +70,7 @@ class RSS:
         return jsonObject
 
     def search_method_switch(self, feed, searchStringOrIndex):
-            if type(searchStringOrIndex) == unicode:
+            if type(searchStringOrIndex) == str:
                 entry = self.find_entry_by_title(feed, searchStringOrIndex)
             elif type(searchStringOrIndex) == int:
                 entry = self.find_entry_by_index(feed, searchStringOrIndex)

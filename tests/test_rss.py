@@ -127,7 +127,7 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.EmptyObject = {}
         self.TestCaseFileName = "test_case_file_name"
         self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
-        self.CompareObject = {"title": "test_case_file_name", "link": "http://test/case/link/", "name": "test_case_file_name", "id": "89d6f3d486d2b5206720fd00f4538768", "summary": "summary!"}
+        self.CompareObject = {"title": "test_case_file_name", "link": "http://test/case/link/", "name": "test_case_file_name", "id": "ce4bf806d629dd8bbaed24f3a8eb0d8f", "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
     def tearDown(self):
