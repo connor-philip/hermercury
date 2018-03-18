@@ -78,11 +78,24 @@ def stop_background_process(args):
     sys.stdout.write("{}\n".format(userMessage))
 
 
+def return_feed_example(args):
+    feedAddress = args.feedExample
+    RSSInstance = RSS(feedAddress)
+    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 1)
+    sys.stdout.write("{:<}: {:^}\n-----------------------\n".format("Key", "Value"))
+    for key in firstEntry:
+        sys.stdout.write("{:<}: {:^}\n\n".format(str(key), str(firstEntry[key])))
+
+
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
 startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly")
 startParser.set_defaults(commandFunction=start_background_process)
+
+configParser = subparsers.add_parser("config", help="Various methods to setup the user config")
+configParser.add_argument("--feedExample", type=str, help="Shows the available keys in the given feed")
+configParser.set_defaults(commandFunction=return_feed_example, foreground=False, onceNow=False)
 
 stopParser = subparsers.add_parser("stop", help="Stops Hermercury")
 stopParser.set_defaults(commandFunction=stop_background_process, foreground=False, onceNow=False)
