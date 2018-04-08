@@ -1,6 +1,9 @@
 from hashlib import md5
+import modules.helper_functions
+import collections
 import feedparser
 import json
+import six
 import os
 import re
 
@@ -40,7 +43,9 @@ class RSS:
     def save_object_as_json_to_disk(self, dictionaryObject, file, name):
         if dictionaryObject:
             dictionaryObject["name"] = name
-            dictionaryObject["id"] = md5(str(dictionaryObject).encode("utf-8")).hexdigest()
+            hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
+            hashDict = modules.helper_functions.string_unicode_handler(dictionaryObject, py3Encoding=True)
+            dictionaryObject["id"] = md5(hashDict).hexdigest()
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -52,7 +57,9 @@ class RSS:
                 jsonFile.close()
 
                 dictionaryObject["name"] = name
-                compareId = md5(str(dictionaryObject).encode("utf-8")).hexdigest()
+                hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
+                hashDict = modules.helper_functions.string_unicode_handler(dictionaryObject, py3Encoding=True)
+                compareId = md5(hashDict).hexdigest()
 
                 if compareId == jsonObject["id"]:
                     return False
@@ -70,9 +77,9 @@ class RSS:
         return jsonObject
 
     def search_method_switch(self, feed, searchStringOrIndex):
-            if type(searchStringOrIndex) == str:
+            if isinstance(searchStringOrIndex, six.string_types):
                 entry = self.find_entry_by_title(feed, searchStringOrIndex)
-            elif type(searchStringOrIndex) == int:
+            elif isinstance(searchStringOrIndex, int):
                 entry = self.find_entry_by_index(feed, searchStringOrIndex)
             else:
                 return None
