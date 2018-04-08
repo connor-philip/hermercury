@@ -1,4 +1,5 @@
-schedule
 feedparser
+schedule
 psutil
+six
 .
