@@ -1,5 +1,5 @@
 from modules.process_control import ProcessControl
-from modules.helper_functions import read_config
+from modules import helper_functions
 from modules.notify import EmailControl
 from modules.rss import RSS
 import schedule
@@ -11,7 +11,7 @@ import os
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
-configs = read_config()
+configs = helper_functions.read_config()
 notificationConfigs = configs["notificationConfigs"]
 emailConfig = configs["emailConfig"]
 
@@ -54,8 +54,8 @@ def main():
     for notificationConfig in notificationConfigs:
         Instance = Notification(notificationConfig, emailConfig)
         Instance.search_for_notification()
-        if Instance.entry and Instance.notificationPending:
-            Instance.send_notification()
+        # if Instance.entry and Instance.notificationPending:
+        #     Instance.send_notification()
 
 
 def start_scheduler(args):
@@ -81,10 +81,12 @@ def stop_background_process(args):
 def return_feed_example(args):
     feedAddress = args.feedExample
     RSSInstance = RSS(feedAddress)
-    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 1)
-    sys.stdout.write("{:<}: {:^}\n-----------------------\n".format("Key", "Value"))
+    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 4)
+    sys.stdout.write("[{:<}]: {:^}\n-----------------------\n".format("Key", "Value"))
+
     for key in firstEntry:
-        sys.stdout.write("{:<}: {:^}\n\n".format(str(key), str(firstEntry[key])))
+        value = helper_functions.string_unicode_handler(firstEntry[key])
+        sys.stdout.write("[{:<}]: {:^}\n\n".format(key, value))
 
 
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
