@@ -11,10 +11,6 @@ import os
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
-configs = read_config()
-notificationConfigs = configs["notificationConfigs"]
-emailConfig = configs["emailConfig"]
-
 parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
 
@@ -52,6 +48,10 @@ class Notification:
 
 
 def main():
+    configs = read_config()
+    notificationConfigs = configs["notificationConfigs"]
+    emailConfig = configs["emailConfig"]
+
     for notificationConfig in notificationConfigs:
         Instance = Notification(notificationConfig, emailConfig)
         Instance.search_for_notification()
