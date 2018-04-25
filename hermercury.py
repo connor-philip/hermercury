@@ -81,13 +81,12 @@ def stop_background_process(args):
 def return_feed_example(args):
     feedAddress = args.feedExample
     RSSInstance = RSS(feedAddress)
-    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 4)
+    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 0)
     sys.stdout.write("[{:<}]: {:^}\n-----------------------\n".format("Key", "Value"))
 
     for key in firstEntry:
         value = helper_functions.string_unicode_handler(firstEntry[key])
         sys.stdout.write("[{:<}]: {:^}\n\n".format(key, value))
-
 
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
