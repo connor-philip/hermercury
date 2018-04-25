@@ -88,6 +88,7 @@ def return_feed_example(args):
         value = helper_functions.string_unicode_handler(firstEntry[key])
         sys.stdout.write("[{:<}]: {:^}\n\n".format(key, value))
 
+
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
