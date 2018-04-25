@@ -69,7 +69,8 @@ def start_scheduler(args):
 
 def start_background_process(args):
     frequency = str(args.frequency)
-    userMessage = ProcessControl(PIDFILE).create_process(["python", os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
+    pythonExePath = helper_functions.find_python_executable()
+    userMessage = ProcessControl(PIDFILE).create_process([pythonExePath, os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
     sys.stdout.write("{}\n".format(userMessage))
 
 
