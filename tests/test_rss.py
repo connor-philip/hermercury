@@ -126,9 +126,9 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.RSSInstance = RSS("")
         self.jsonDir = JSONDIR
         self.EmptyObject = {}
-        self.TestCaseFileName = u"test_case_file_name"
-        self.Object = {u"summary": u"summary!", u"link": u"http://test/case/link/", u"title": self.TestCaseFileName}
-        self.CompareObject = {u"title": self.TestCaseFileName, u"link": u"http://test/case/link/", u"name": self.TestCaseFileName, u"id": u"86d9c6081dafd50dacc85953a807347c", u"summary": u"summary!"}
+        self.TestCaseFileName = "test_case_file_name"
+        self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
+        self.CompareObject = {"title": self.TestCaseFileName, "link": "http://test/case/link/", "name": self.TestCaseFileName, "id": "2dd66ccfe382b544ab4e27acacb43afb", "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
     def tearDown(self):
