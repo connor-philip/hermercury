@@ -40,12 +40,21 @@ class RSS:
 
         return storeObject
 
+    def create_notification_id(self, dictionaryObject):
+        orderedDict = collections.OrderedDict(sorted(dictionaryObject.items()))
+        stringToHash = ""
+
+        for key in orderedDict:
+            stringToHash += orderedDict[key]
+
+        encodedString = modules.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
+        return md5(encodedString).hexdigest()
+
     def save_object_as_json_to_disk(self, dictionaryObject, file, name):
         if dictionaryObject:
             dictionaryObject["name"] = name
             hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-            hashDict = modules.helper_functions.string_unicode_handler(dictionaryObject, py3Encoding=True)
-            dictionaryObject["id"] = md5(hashDict).hexdigest()
+            dictionaryObject["id"] = self.create_notification_id(hashDict)
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -58,8 +67,7 @@ class RSS:
 
                 dictionaryObject["name"] = name
                 hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-                hashDict = modules.helper_functions.string_unicode_handler(dictionaryObject, py3Encoding=True)
-                compareId = md5(hashDict).hexdigest()
+                compareId = self.create_notification_id(hashDict)
 
                 if compareId == jsonObject["id"]:
                     return False
