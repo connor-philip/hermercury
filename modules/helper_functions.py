@@ -1,5 +1,3 @@
-from hashlib import md5
-import collections
 import json
 import sys
 import os
@@ -27,12 +25,3 @@ def string_unicode_handler(inputString, py3Encoding=False):
         return str(inputString)
     elif PY2:
         return unicode(inputString).encode("utf-8")
-
-
-hashDict = {u"summary": u"summary!", u"link": u"http://test/case/link/", u"title": u"test_case_file_name"}
-hashDict = collections.OrderedDict(sorted(hashDict.items()))
-res = string_unicode_handler(hashDict, py3Encoding=True)
-resHash = md5(res).hexdigest()
-sys.stdout.write(string_unicode_handler(res))
-sys.stdout.write(resHash)
-# get this to give the same id using python 2 & 3, or change unit tests to calculate id based on python version.
