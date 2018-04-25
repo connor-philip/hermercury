@@ -54,8 +54,8 @@ def main():
     for notificationConfig in notificationConfigs:
         Instance = Notification(notificationConfig, emailConfig)
         Instance.search_for_notification()
-        # if Instance.entry and Instance.notificationPending:
-        #     Instance.send_notification()
+        if Instance.entry and Instance.notificationPending:
+            Instance.send_notification()
 
 
 def start_scheduler(args):
