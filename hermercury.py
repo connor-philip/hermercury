@@ -1,7 +1,7 @@
 from modules.process_control import ProcessControl
-from modules.helper_functions import read_config
+from modules import helper_functions
 from modules.notify import EmailControl
-from modules import rss
+from modules.rss import RSS
 import schedule
 import argparse
 import time
@@ -33,13 +33,12 @@ class Notification:
             self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
 
     def search_for_notification(self):
-        feedContent = rss.open_feed(self.feed)
-        self.entry = rss.search_method_switch(feedContent, self.search)
-        dictObject = rss.create_object_with_wanted_parameters(self.entry, self.storeList)
-        self.notificationPending = rss.compare_notification_id(self.fullJsonFilePath, self.name, dictObject)
+        RSSInstance = RSS(self.feed)
+        RSSInstance.search_for_notification(self.name, self.search, self.storeList, self.fullJsonFilePath)
+        self.entry = RSSInstance.entry
+        self.notificationPending = RSSInstance.notificationPending
         if self.entry and self.notificationPending:
-            rss.save_object_as_json_to_disk(dictObject, self.fullJsonFilePath, self.name)
-            self.notificationObject = rss.load_notification_object(self.fullJsonFilePath)
+            self.notificationObject = RSSInstance.notificationObject
 
     def send_notification(self):
         EmailControlInstance = EmailControl(self.senderAddress, self.senderAddressPassword, self.mailServer, self.targetAddress)
@@ -48,7 +47,7 @@ class Notification:
 
 
 def main():
-    configs = read_config()
+    configs = helper_functions.read_config()
     notificationConfigs = configs["notificationConfigs"]
     emailConfig = configs["emailConfig"]
 
@@ -70,7 +69,8 @@ def start_scheduler(args):
 
 def start_background_process(args):
     frequency = str(args.frequency)
-    userMessage = ProcessControl(PIDFILE).create_process(["python", os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
+    pythonExePath = helper_functions.find_python_executable()
+    userMessage = ProcessControl(PIDFILE).create_process([pythonExePath, os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
     sys.stdout.write("{}\n".format(userMessage))
 
 
@@ -79,11 +79,26 @@ def stop_background_process(args):
     sys.stdout.write("{}\n".format(userMessage))
 
 
+def return_feed_example(args):
+    feedAddress = args.feedExample
+    RSSInstance = RSS(feedAddress)
+    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 0)
+    sys.stdout.write("[{:<}]: {:^}\n-----------------------\n".format("Key", "Value"))
+
+    for key in firstEntry:
+        value = helper_functions.string_unicode_handler(firstEntry[key])
+        sys.stdout.write("[{:<}]: {:^}\n\n".format(key, value))
+
+
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
 startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly")
 startParser.set_defaults(commandFunction=start_background_process)
+
+configParser = subparsers.add_parser("config", help="Various methods to setup the user config")
+configParser.add_argument("--feedExample", type=str, help="Shows the available keys in the given feed")
+configParser.set_defaults(commandFunction=return_feed_example, foreground=False, onceNow=False)
 
 stopParser = subparsers.add_parser("stop", help="Stops Hermercury")
 stopParser.set_defaults(commandFunction=stop_background_process, foreground=False, onceNow=False)
