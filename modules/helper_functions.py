@@ -25,3 +25,16 @@ def string_unicode_handler(inputString, py3Encoding=False):
         return str(inputString)
     elif PY2:
         return unicode(inputString).encode("utf-8")
+
+
+def find_python_executable():
+    PY3 = sys.version_info[0] == 3
+    linux = "linux" in sys.platform
+    pythonDir = os.path.dirname(sys.executable)
+
+    if PY3 and linux:
+        pyPath = os.path.join(pythonDir, "python3")
+    else:
+        pyPath = os.path.join(pythonDir, "python")
+
+    return pyPath
