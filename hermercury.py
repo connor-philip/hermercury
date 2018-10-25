@@ -79,6 +79,15 @@ def stop_background_process(args):
     sys.stdout.write("{}\n".format(userMessage))
 
 
+def process_status(args):
+    running = ProcessControl(PIDFILE).process_is_running()
+
+    if running:
+        sys.stdout.write("Hermercury process is running\n")
+    elif running is False:
+        sys.stdout.write("No hermercury process running\n")
+
+
 def return_feed_example(args):
     feedAddress = args.feedExample
     RSSInstance = RSS(feedAddress)
@@ -95,6 +104,9 @@ startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets t
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
 startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly")
 startParser.set_defaults(commandFunction=start_background_process)
+
+statusParser = subparsers.add_parser("status", help="Returns the status of the program")
+statusParser.set_defaults(commandFunction=process_status, foreground=False, onceNow=False)
 
 configParser = subparsers.add_parser("config", help="Various methods to setup the user config")
 configParser.add_argument("--feedExample", type=str, help="Shows the available keys in the given feed")
