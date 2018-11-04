@@ -8,15 +8,11 @@ A program used to notify via email updates to your watched RSS & Atom feeds.
 ## Setup
 * Clone the repo
 * Inside a terminal at the hermercury directory, enter `pip install -r requirements.txt` to install the python modules
-* Rename `config_template.json` to `config.json`, or simply create a new file file with that name.
+* Rename `config_template.json` to `config.json`, or create a new file file with that name.
 * Fill out the config to meet your needs, see the Config section of the readme for details.
 
 ## Usage
 After following the setup and configuration, the intended method to run hermercury is `python hermercury.py start` which will start a process in the background.
-By default the program runs at 15 minute intervals, to change this simply supply a `-f` option, for example `python hermercury.py start -f 60` would run the program every hour instead.
-
-To stop hermercury from running, simply enter `python hermercury.py stop`.
-
 Entering `python hermercury -h` (and also `python hermercury start -h`) will show a list of the available commands and a their description.
 
 
