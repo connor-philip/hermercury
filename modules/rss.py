@@ -43,24 +43,19 @@ class RSS:
         encodedString = hermercury.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
         return md5(encodedString).hexdigest()
 
-    def save_object_as_json_to_disk(self, dictionaryObject, file, name):
+    def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId):
         if dictionaryObject:
             dictionaryObject["name"] = name
-            hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-            dictionaryObject["id"] = self.create_notification_id(hashDict)
+            dictionaryObject["id"] = hermercuryId
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
-    def compare_notification_id(self, file, name, dictionaryObject):
+    def compare_notification_id(self, file, compareId):
         fullFilePath = file
         if os.path.isfile(fullFilePath):
             with open(fullFilePath, "r") as jsonFile:
                 jsonObject = json.load(jsonFile)
                 jsonFile.close()
-
-            dictionaryObject["name"] = name
-            hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-            compareId = self.create_notification_id(hashDict)
 
             if compareId == jsonObject["id"]:
                 return False
@@ -79,7 +74,8 @@ class RSS:
 
     def search_for_notification(self, name, search, fullJsonFilePath):
         self.entry = self.find_entry_by_title(self.feedContent, search)
-        self.notificationPending = self.compare_notification_id(fullJsonFilePath, name, self.entry)
+        hermercuryId = self.create_notification_id(self.entry)
+        self.notificationPending = self.compare_notification_id(fullJsonFilePath, hermercuryId)
         if self.entry and self.notificationPending:
-            self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name)
+            self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name, hermercuryId)
             self.notificationObject = self.load_notification_object(fullJsonFilePath)

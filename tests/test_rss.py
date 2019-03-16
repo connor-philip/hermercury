@@ -94,8 +94,15 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.jsonDir = JSONDIR
         self.EmptyObject = {}
         self.TestCaseFileName = "test_case_file_name"
-        self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
-        self.CompareObject = {"title": self.TestCaseFileName, "link": "http://test/case/link/", "name": self.TestCaseFileName, "id": "2dd66ccfe382b544ab4e27acacb43afb", "summary": "summary!"}
+        self.Object = {"summary": "summary!",
+                       "link": "http://test/case/link/",
+                       "title": self.TestCaseFileName}
+        self.hermercuryId = self.RSSInstance.create_notification_id(self.Object)
+        self.CompareObject = {"title": self.TestCaseFileName,
+                              "link": "http://test/case/link/",
+                              "name": self.TestCaseFileName,
+                              "id": "12aaf73978396f398e2af86a1f5d88e1",
+                              "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
     def tearDown(self):
@@ -103,7 +110,10 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
             os.remove(self.FullFilePath)
 
     def test_object_is_saved(self):
-        self.RSSInstance.save_object_as_json_to_disk(self.Object, self.FullFilePath, self.TestCaseFileName)
+        self.RSSInstance.save_object_as_json_to_disk(self.Object,
+                                                     self.FullFilePath,
+                                                     self.TestCaseFileName,
+                                                     self.hermercuryId)
 
         with open(self.FullFilePath, "r+") as TestCaseFile:
             TestCaseFileObject = json.load(TestCaseFile)
@@ -112,7 +122,10 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.assertEqual(self.CompareObject, TestCaseFileObject)
 
     def test_empty_object_is_not_saved(self):
-        self.RSSInstance.save_object_as_json_to_disk(self.EmptyObject, self.FullFilePath, self.TestCaseFileName)
+        self.RSSInstance.save_object_as_json_to_disk(self.EmptyObject,
+                                                     self.FullFilePath,
+                                                     self.TestCaseFileName,
+                                                     self.hermercuryId)
 
         Result = os.path.isfile(self.FullFilePath)
 
@@ -126,22 +139,29 @@ class TestCompareNotificationID(unittest.TestCase):
         self.jsonDir = JSONDIR
         self.TestCaseFileName = "test_case_file_name"
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
-        self.Object = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
-        self.CompareObject = {"summary": "summary!", "link": "http://test/case/link/", "title": self.TestCaseFileName}
-        self.RSSInstance.save_object_as_json_to_disk(self.Object, self.FullFilePath, self.TestCaseFileName)
+        self.Object = {"summary": "summary!",
+                       "link": "http://test/case/link/",
+                       "title": self.TestCaseFileName}
+        self.hermercuryId = self.RSSInstance.create_notification_id(self.Object)
+        self.RSSInstance.save_object_as_json_to_disk(self.Object,
+                                                     self.FullFilePath,
+                                                     self.TestCaseFileName,
+                                                     self.hermercuryId)
 
     def tearDown(self):
         if os.path.isfile(self.FullFilePath):
             os.remove(self.FullFilePath)
 
     def test_returns_false_when_id_matches(self):
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath, self.TestCaseFileName, self.CompareObject)
+        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
+                                                          self.hermercuryId)
 
         self.assertEqual(Result, False)
 
     def test_returns_true_when_id_does_not_match(self):
-        self.CompareObject["random_param_to_change_id"] = "anything"
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath, self.TestCaseFileName, self.CompareObject)
+        self.hermercuryId = "changed"
+        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
+                                                          self.hermercuryId)
 
         self.assertEqual(Result, True)
 
@@ -149,7 +169,8 @@ class TestCompareNotificationID(unittest.TestCase):
         if os.path.isfile(self.FullFilePath):
             os.remove(self.FullFilePath)
 
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath, self.TestCaseFileName, self.CompareObject)
+        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
+                                                          self.hermercuryId)
 
         self.assertEqual(Result, True)
 
