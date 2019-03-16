@@ -47,7 +47,7 @@ class RSS:
         for key in orderedDict:
             stringToHash += orderedDict[key]
 
-        encodedString =  hermercury.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
+        encodedString = hermercury.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
         return md5(encodedString).hexdigest()
 
     def save_object_as_json_to_disk(self, dictionaryObject, file, name):
