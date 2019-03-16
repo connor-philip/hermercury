@@ -140,7 +140,6 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 
         with open(self.FullFilePath, "r+") as TestCaseFile:
             TestCaseFileObject = json.load(TestCaseFile)
-            sys.stdout.write(TestCaseFileObject["id"])
             TestCaseFile.close()
 
         self.assertEqual(self.CompareObject, TestCaseFileObject)
