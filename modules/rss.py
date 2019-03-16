@@ -38,7 +38,7 @@ class RSS:
         stringToHash = ""
 
         for key in orderedDict:
-            stringToHash += orderedDict[key]
+            stringToHash += hermercury.helper_functions.string_unicode_handler(orderedDict[key])
 
         encodedString = hermercury.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
         return md5(encodedString).hexdigest()
@@ -58,14 +58,14 @@ class RSS:
                 jsonObject = json.load(jsonFile)
                 jsonFile.close()
 
-                dictionaryObject["name"] = name
-                hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-                compareId = self.create_notification_id(hashDict)
+            dictionaryObject["name"] = name
+            hashDict = collections.OrderedDict(sorted(dictionaryObject.items()))
+            compareId = self.create_notification_id(hashDict)
 
-                if compareId == jsonObject["id"]:
-                    return False
-                else:
-                    return True
+            if compareId == jsonObject["id"]:
+                return False
+            else:
+                return True
         else:
             return True
 
@@ -77,10 +77,9 @@ class RSS:
 
         return jsonObject
 
-    def search_for_notification(self, name, search, storeList, fullJsonFilePath):
+    def search_for_notification(self, name, search, fullJsonFilePath):
         self.entry = self.find_entry_by_title(self.feedContent, search)
-        dictObject = self.create_object_with_wanted_parameters(self.entry, storeList)
-        self.notificationPending = self.compare_notification_id(fullJsonFilePath, name, dictObject)
+        self.notificationPending = self.compare_notification_id(fullJsonFilePath, name, self.entry)
         if self.entry and self.notificationPending:
-            self.save_object_as_json_to_disk(dictObject, fullJsonFilePath, name)
+            self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name)
             self.notificationObject = self.load_notification_object(fullJsonFilePath)

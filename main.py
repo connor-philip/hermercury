@@ -22,7 +22,6 @@ class Notification:
         self.name = notificationConfig["name"]
         self.feed = notificationConfig["feed"]
         self.search = notificationConfig["search"]
-        self.storeList = notificationConfig["storeList"]
         self.mailTemplate = notificationConfig["mailTemplate"]
 
         self.senderAddress = emailConfig["senderAddress"]
@@ -35,7 +34,7 @@ class Notification:
 
     def search_for_notification(self):
         RSSInstance = RSS(self.feed)
-        RSSInstance.search_for_notification(self.name, self.search, self.storeList, self.fullJsonFilePath)
+        RSSInstance.search_for_notification(self.name, self.search, self.fullJsonFilePath)
         self.entry = RSSInstance.entry
         self.notificationPending = RSSInstance.notificationPending
         if self.entry and self.notificationPending:

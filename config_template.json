@@ -9,8 +9,7 @@
         {
             "name": "hermercury github",
             "feed": "https://github.com/connor-philip/hermercury/commits/master.atom",
-            "search": 0,
-            "storeList": ["author", "link"],
+            "search": ".+",
             "mailTemplate": "hermercury_example.txt"
         }
     ]
