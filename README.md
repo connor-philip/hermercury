@@ -1,7 +1,8 @@
 # Hermercury
 [![Build Status](https://travis-ci.org/connor-philip/lazy_unit_tester.svg?branch=master)](https://travis-ci.org/connor-philip/hermercury)
 
-A program used to notify via email updates to your watched RSS & Atom feeds.
+
+A Python3 program used to notify via email updates to your watched RSS & Atom feeds.
 -----
 
 
@@ -12,12 +13,12 @@ A program used to notify via email updates to your watched RSS & Atom feeds.
 * Fill out the config to meet your needs, see the Config section of the readme for details.
 
 ## Usage
-After following the setup and configuration, the intended method to run hermercury is `python hermercury.py start` which will start a process in the background.
+After following the set up and configuration, the intended method to run hermercury is `python hermercury.py start` which will start a process in the background.
 Entering `python hermercury -h` (and also `python hermercury start -h`) will show a list of the available commands and a their description.
 
 
 #### Config
-There is already a setup notification config along with it's mail template ready to use, however the emailConfig section is required to be filled out manually
+There is already a set up notification config along with it's mail template ready to use, however the emailConfig section is required to be filled out manually
 
 
 ##### Email Config
@@ -33,8 +34,7 @@ Examples are already present in the [config_template.json](https://github.com/co
 
 |Key            | Description                                                                                                       |
 |---------------|-------------------------------------------------------------------------------------------------------------------|
-|name           | Arbitrary name of the notification setup.                                                                         |
-|feed           | The url of the RSS/Atom feed.                                                                                     |
-|search         | Can either be an int to match the index of the feed, or a string which matches a sub string of an entrie's title. |
-|storeList      | Keys you want to store from the feed entry matched.                                                               |
+|name           | Arbitrary name of the notification set up.                                                                         |
+|feed           | The URL of the RSS/Atom feed.                                                                                     |
+|search         | A string which matches a sub string of an entries title. RegEx is supported.                                      |
 |mailTemplate   | Name of the mailTemplate to send on feed entry match.                                                             |
