@@ -2,13 +2,9 @@ import json
 import sys
 import os
 
-CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
-PROJECTDIR = os.path.abspath(os.path.join(CURRENTDIR, os.pardir))
-CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
 
-
-def read_config():
-    with open(CONFIGPATH, "r") as jsonFile:
+def read_config(configPath):
+    with open(configPath, "r") as jsonFile:
         configData = json.load(jsonFile)
         jsonFile.close()
 

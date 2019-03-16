@@ -1,5 +1,5 @@
 from hermercury.process_control import ProcessControl
-from modules import helper_functions
+from hermercury import helper_functions
 from hermercury.notify import EmailControl
 from hermercury.rss import RSS
 import schedule
@@ -9,6 +9,7 @@ import sys
 import os
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
+CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
 parser = argparse.ArgumentParser(prog="command")
@@ -18,19 +19,19 @@ subparsers = parser.add_subparsers(help='sub-command help')
 class Notification:
 
     def __init__(self, notificationConfig, emailConfig):
-            self.name = notificationConfig["name"]
-            self.feed = notificationConfig["feed"]
-            self.search = notificationConfig["search"]
-            self.storeList = notificationConfig["storeList"]
-            self.mailTemplate = notificationConfig["mailTemplate"]
+        self.name = notificationConfig["name"]
+        self.feed = notificationConfig["feed"]
+        self.search = notificationConfig["search"]
+        self.storeList = notificationConfig["storeList"]
+        self.mailTemplate = notificationConfig["mailTemplate"]
 
-            self.senderAddress = emailConfig["senderAddress"]
-            self.senderAddressPassword = emailConfig["senderAddressPassword"]
-            self.mailServer = emailConfig["mailServer"]
-            self.targetAddress = emailConfig["targetAddress"]
+        self.senderAddress = emailConfig["senderAddress"]
+        self.senderAddressPassword = emailConfig["senderAddressPassword"]
+        self.mailServer = emailConfig["mailServer"]
+        self.targetAddress = emailConfig["targetAddress"]
 
-            self.fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, self.name)
-            self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
+        self.fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, self.name)
+        self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
 
     def search_for_notification(self):
         RSSInstance = RSS(self.feed)
@@ -47,7 +48,7 @@ class Notification:
 
 
 def main():
-    configs = helper_functions.read_config()
+    configs = helper_functions.read_config(CONFIGPATH)
     notificationConfigs = configs["notificationConfigs"]
     emailConfig = configs["emailConfig"]
 

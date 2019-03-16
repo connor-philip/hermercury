@@ -2,6 +2,7 @@
 *.pyc
 config.py
 config.json
+config_backup.json
 hermercury.pid
 json/*.json
 mail_templates/*.txt
