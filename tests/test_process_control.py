@@ -1,4 +1,4 @@
-from modules.process_control import ProcessControl
+from hermercury.process_control import ProcessControl
 import unittest
 import json
 import os

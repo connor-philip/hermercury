@@ -1,4 +1,4 @@
-from modules.notify import EmailControl
+from hermercury.notify import EmailControl
 import unittest
 import os
 

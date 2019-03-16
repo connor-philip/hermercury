@@ -1,4 +1,4 @@
-from modules.rss import RSS
+from hermercury.rss import RSS
 import json
 import os
 import unittest

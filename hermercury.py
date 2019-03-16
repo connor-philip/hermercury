@@ -1,7 +1,7 @@
-from modules.process_control import ProcessControl
+from hermercury.process_control import ProcessControl
 from modules import helper_functions
-from modules.notify import EmailControl
-from modules.rss import RSS
+from hermercury.notify import EmailControl
+from hermercury.rss import RSS
 import schedule
 import argparse
 import time
