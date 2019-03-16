@@ -23,15 +23,6 @@ class RSS:
 
         return entryMatch
 
-    def create_object_with_wanted_parameters(self, originalObject, keyList):
-        storeObject = {}
-
-        if originalObject:
-            for key in (key for key in keyList if key in originalObject):
-                storeObject[key] = originalObject[key]
-
-        return storeObject
-
     def create_notification_id(self, dictionaryObject):
 
         encodedString = hermercury.helper_functions.string_unicode_handler(dictionaryObject["title"], py3Encoding=True)

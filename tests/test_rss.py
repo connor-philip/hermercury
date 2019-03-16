@@ -56,37 +56,6 @@ class TestFindEntryByTitle(unittest.TestCase):
         self.assertNotEqual(self.TestDict3, Result)
 
 
-class TestCreateObjectWithWantedParameters(unittest.TestCase):
-
-    def setUp(self):
-        self.RSSInstance = RSS("")
-        self.TestDict = {"title": "Title1", "parameter2": 2, "parameter3": "three", "parameter4": [1, 2, 3, 4]}
-
-    def test_keys_are_saved(self):
-        Result = self.RSSInstance.create_object_with_wanted_parameters(self.TestDict, ["title", "parameter2", "parameter4"])
-        ExpectedResult = {"title": "Title1", "parameter2": 2, "parameter4": [1, 2, 3, 4]}
-
-        self.assertEqual(ExpectedResult, Result)
-
-    def test_key_missing_from_original_object_throws_no_error(self):
-        Result = self.RSSInstance.create_object_with_wanted_parameters(self.TestDict, ["title", "does_not_exist"])
-        ExpectedResult = {"title": "Title1"}
-
-        self.assertEqual(ExpectedResult, Result)
-
-    def test_returns_empty_dictionary_when_nothing_found(self):
-        Result = self.RSSInstance.create_object_with_wanted_parameters(self.TestDict, ["does_not_exist"])
-        ExpectedResult = {}
-
-        self.assertEqual(ExpectedResult, Result)
-
-    def test_if_original_object_nonetype_return_empty_dic(self):
-        Result = self.RSSInstance.create_object_with_wanted_parameters(None, ["title"])
-        ExpectedResult = {}
-
-        self.assertEqual(ExpectedResult, Result)
-
-
 class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 
     def setUp(self):
@@ -101,7 +70,7 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.CompareObject = {"title": self.TestCaseFileName,
                               "link": "http://test/case/link/",
                               "hermercuryName": self.TestCaseFileName,
-                              "hermercuryId": "12aaf73978396f398e2af86a1f5d88e1",
+                              "hermercuryId": "bb5cea22fe8cb6ac87227f27be3a611d",
                               "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
