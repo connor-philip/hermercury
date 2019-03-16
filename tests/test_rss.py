@@ -2,7 +2,6 @@ from hermercury.rss import RSS
 import json
 import os
 import unittest
-import sys
 
 
 CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
@@ -55,38 +54,6 @@ class TestFindEntryByTitle(unittest.TestCase):
 
         self.assertEqual(self.TestDict2, Result)
         self.assertNotEqual(self.TestDict3, Result)
-
-
-class TestFindEntryByIndex(unittest.TestCase):
-
-    def setUp(self):
-        self.RSSInstance = RSS("")
-        self.TestDict1 = {"title": "Title1"}
-        self.TestDict2 = {"title": "Title2"}
-        self.TestDict3 = {"title": "Title3", "key": "value"}
-        self.TestList = [self.TestDict1, self.TestDict2, self.TestDict3]
-
-    def test_returns_correct_index(self):
-        Result1 = self.RSSInstance.find_entry_by_index(self.TestList, 0)
-        Result2 = self.RSSInstance.find_entry_by_index(self.TestList, 1)
-        Result3 = self.RSSInstance.find_entry_by_index(self.TestList, 2)
-
-        self.assertEqual(self.TestDict1, Result1)
-        self.assertEqual(self.TestDict2, Result2)
-        self.assertEqual(self.TestDict3, Result3)
-
-    def test_out_of_index(self):
-        Result = self.RSSInstance.find_entry_by_index(self.TestList, 100)
-
-        self.assertEqual(None, Result)
-
-    def test_try_find_with_non_int(self):
-        try:
-            Result = self.RSSInstance.find_entry_by_index(self.TestList, "1")
-        except TypeError:
-            Result = TypeError
-
-        self.assertEqual(TypeError, Result)
 
 
 class TestCreateObjectWithWantedParameters(unittest.TestCase):

@@ -3,7 +3,6 @@ import hermercury.helper_functions
 import collections
 import feedparser
 import json
-import six
 import os
 import re
 
@@ -24,12 +23,6 @@ class RSS:
                 break
 
         return entryMatch
-
-    def find_entry_by_index(self, searchList, index):
-        try:
-            return searchList[index]
-        except IndexError:
-            return None
 
     def create_object_with_wanted_parameters(self, originalObject, keyList):
         storeObject = {}
@@ -84,17 +77,8 @@ class RSS:
 
         return jsonObject
 
-    def search_method_switch(self, feed, searchStringOrIndex):
-            if isinstance(searchStringOrIndex, six.string_types):
-                entry = self.find_entry_by_title(feed, searchStringOrIndex)
-            elif isinstance(searchStringOrIndex, int):
-                entry = self.find_entry_by_index(feed, searchStringOrIndex)
-            else:
-                return None
-            return entry
-
     def search_for_notification(self, name, search, storeList, fullJsonFilePath):
-        self.entry = self.search_method_switch(self.feedContent, search)
+        self.entry = self.find_entry_by_title(self.feedContent, search)
         dictObject = self.create_object_with_wanted_parameters(self.entry, storeList)
         self.notificationPending = self.compare_notification_id(fullJsonFilePath, name, dictObject)
         if self.entry and self.notificationPending:
