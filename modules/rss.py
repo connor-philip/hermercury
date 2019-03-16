@@ -45,8 +45,8 @@ class RSS:
 
     def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId):
         if dictionaryObject:
-            dictionaryObject["name"] = name
-            dictionaryObject["id"] = hermercuryId
+            dictionaryObject["hermercuryName"] = name
+            dictionaryObject["hermercuryId"] = hermercuryId
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -57,7 +57,7 @@ class RSS:
                 jsonObject = json.load(jsonFile)
                 jsonFile.close()
 
-            if compareId == jsonObject["id"]:
+            if compareId == jsonObject["hermercuryId"]:
                 return False
             else:
                 return True

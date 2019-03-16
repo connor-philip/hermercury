@@ -100,8 +100,8 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.hermercuryId = self.RSSInstance.create_notification_id(self.Object)
         self.CompareObject = {"title": self.TestCaseFileName,
                               "link": "http://test/case/link/",
-                              "name": self.TestCaseFileName,
-                              "id": "12aaf73978396f398e2af86a1f5d88e1",
+                              "hermercuryName": self.TestCaseFileName,
+                              "hermercuryId": "12aaf73978396f398e2af86a1f5d88e1",
                               "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
