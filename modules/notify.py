@@ -15,7 +15,7 @@ class EmailControl:
             mailBody = str(mailBodyTemplateFile.read())
             mailBodyTemplateFile.close()
 
-        matchList = re.findall("{{\w+}}", mailBody)
+        matchList = re.findall(r"{{\w+}}", mailBody)
         for match in (match for match in matchList if matchList):
             key = match.strip("{}")
             if key in variableStore:
