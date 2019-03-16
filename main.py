@@ -36,9 +36,10 @@ class Notification:
         RSSInstance = RSS(self.feed)
         RSSInstance.search_for_notification(self.name, self.search, self.fullJsonFilePath)
         self.entry = RSSInstance.entry
-        self.notificationPending = RSSInstance.notificationPending
-        if self.entry and self.notificationPending:
-            self.notificationObject = RSSInstance.notificationObject
+        if self.entry:
+            self.notificationPending = RSSInstance.notificationPending
+            if self.notificationPending:
+                self.notificationObject = RSSInstance.notificationObject
 
     def send_notification(self):
         EmailControlInstance = EmailControl(self.senderAddress, self.senderAddressPassword, self.mailServer, self.targetAddress)

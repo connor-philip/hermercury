@@ -1,6 +1,5 @@
 from hashlib import md5
 import hermercury.helper_functions
-import collections
 import feedparser
 import json
 import os
@@ -34,13 +33,9 @@ class RSS:
         return storeObject
 
     def create_notification_id(self, dictionaryObject):
-        orderedDict = collections.OrderedDict(sorted(dictionaryObject.items()))
-        stringToHash = ""
 
-        for key in orderedDict:
-            stringToHash += hermercury.helper_functions.string_unicode_handler(orderedDict[key])
+        encodedString = hermercury.helper_functions.string_unicode_handler(dictionaryObject["title"], py3Encoding=True)
 
-        encodedString = hermercury.helper_functions.string_unicode_handler(stringToHash, py3Encoding=True)
         return md5(encodedString).hexdigest()
 
     def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId):
@@ -74,8 +69,9 @@ class RSS:
 
     def search_for_notification(self, name, search, fullJsonFilePath):
         self.entry = self.find_entry_by_title(self.feedContent, search)
-        hermercuryId = self.create_notification_id(self.entry)
-        self.notificationPending = self.compare_notification_id(fullJsonFilePath, hermercuryId)
-        if self.entry and self.notificationPending:
-            self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name, hermercuryId)
-            self.notificationObject = self.load_notification_object(fullJsonFilePath)
+        if self.entry:
+            hermercuryId = self.create_notification_id(self.entry)
+            self.notificationPending = self.compare_notification_id(fullJsonFilePath, hermercuryId)
+            if self.notificationPending:
+                self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name, hermercuryId)
+                self.notificationObject = self.load_notification_object(fullJsonFilePath)
