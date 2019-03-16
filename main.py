@@ -89,9 +89,9 @@ def process_status(args):
 
 
 def return_feed_example(args):
-    feedAddress = args.feedExample
+    feedAddress = args.feedAddress
     RSSInstance = RSS(feedAddress)
-    firstEntry = RSSInstance.find_entry_by_index(RSSInstance.feedContent, 0)
+    firstEntry = RSSInstance.find_entry_by_title(RSSInstance.feedContent, ".+")
     sys.stdout.write("[{:<}]: {:^}\n-----------------------\n".format("Key", "Value"))
 
     for key in firstEntry:
@@ -127,4 +127,3 @@ stopParser.set_defaults(commandFunction=stop_background_process)
 if __name__ == "__main__":
     args = parser.parse_args()
     args.commandFunction(args)
-    sys.stdout.write("{}\n".format(args))
