@@ -32,7 +32,6 @@ def main():
         for searchConfig in notificationConfig["searches"]:
 
             name = searchConfig["name"]
-            print(name)
             searchString = searchConfig["searchString"]
             fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
             fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, name)
