@@ -32,13 +32,14 @@ def main():
         for searchConfig in notificationConfig["searches"]:
 
             name = searchConfig["name"]
+            print(name)
             searchString = searchConfig["searchString"]
             fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
             fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, name)
             match = feed.find_entry_by_title(feed.feedContent, searchString)
 
             if match is None:
-                break
+                continue
 
             hermercuryId = feed.create_notification_id(match)
             feed.notificationPending = feed.compare_notification_id(fullJsonFilePath, hermercuryId)
