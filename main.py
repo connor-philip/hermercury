@@ -9,7 +9,7 @@ import sys
 import os
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
-CONFIGPATH = os.path.join(PROJECTDIR, "config_test.json")
+CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
 parser = argparse.ArgumentParser(prog="command")
