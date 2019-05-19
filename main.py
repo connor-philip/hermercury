@@ -9,42 +9,11 @@ import sys
 import os
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
-CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
+CONFIGPATH = os.path.join(PROJECTDIR, "config_test.json")
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
 
 parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
-
-
-class Notification:
-
-    def __init__(self, notificationConfig, emailConfig):
-        self.name = notificationConfig["name"]
-        self.feed = notificationConfig["feed"]
-        self.search = notificationConfig["search"]
-        self.mailTemplate = notificationConfig["mailTemplate"]
-
-        self.senderAddress = emailConfig["senderAddress"]
-        self.senderAddressPassword = emailConfig["senderAddressPassword"]
-        self.mailServer = emailConfig["mailServer"]
-        self.targetAddress = emailConfig["targetAddress"]
-
-        self.fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, self.name)
-        self.fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, self.mailTemplate)
-
-    def search_for_notification(self):
-        RSSInstance = RSS(self.feed)
-        RSSInstance.search_for_notification(self.name, self.search, self.fullJsonFilePath)
-        self.entry = RSSInstance.entry
-        if self.entry:
-            self.notificationPending = RSSInstance.notificationPending
-            if self.notificationPending:
-                self.notificationObject = RSSInstance.notificationObject
-
-    def send_notification(self):
-        EmailControlInstance = EmailControl(self.senderAddress, self.senderAddressPassword, self.mailServer, self.targetAddress)
-        email = EmailControlInstance.build_notification_email(self.name, self.fullMailTemplateFilePath, self.notificationObject)
-        EmailControlInstance.send_email(email)
 
 
 def main():
@@ -52,11 +21,33 @@ def main():
     notificationConfigs = configs["notificationConfigs"]
     emailConfig = configs["emailConfig"]
 
+    senderAddress = emailConfig["senderAddress"]
+    senderAddressPassword = emailConfig["senderAddressPassword"]
+    mailServer = emailConfig["mailServer"]
+    targetAddress = emailConfig["targetAddress"]
+
     for notificationConfig in notificationConfigs:
-        Instance = Notification(notificationConfig, emailConfig)
-        Instance.search_for_notification()
-        if Instance.entry and Instance.notificationPending:
-            Instance.send_notification()
+        feed = RSS(notificationConfig["feedAddress"])
+        mailTemplate = notificationConfig["mailTemplate"]
+        for searchConfig in notificationConfig["searches"]:
+
+            name = searchConfig["name"]
+            searchString = searchConfig["searchString"]
+            fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
+            fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, name)
+            match = feed.find_entry_by_title(feed.feedContent, searchString)
+
+            if match is None:
+                break
+
+            hermercuryId = feed.create_notification_id(match)
+            feed.notificationPending = feed.compare_notification_id(fullJsonFilePath, hermercuryId)
+            if feed.notificationPending:
+                feed.save_object_as_json_to_disk(match, fullJsonFilePath, name, hermercuryId)
+                notificationObject = feed.load_notification_object(fullJsonFilePath)
+                EmailControlInstance = EmailControl(senderAddress, senderAddressPassword, mailServer, targetAddress)
+                email = EmailControlInstance.build_notification_email(name, fullMailTemplateFilePath, notificationObject)
+                EmailControlInstance.send_email(email)
 
 
 def start_scheduler(args):

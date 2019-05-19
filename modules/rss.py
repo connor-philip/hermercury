@@ -62,12 +62,3 @@ class RSS:
                 jsonFile.close()
 
         return jsonObject
-
-    def search_for_notification(self, name, search, fullJsonFilePath):
-        self.entry = self.find_entry_by_title(self.feedContent, search)
-        if self.entry:
-            hermercuryId = self.create_notification_id(self.entry)
-            self.notificationPending = self.compare_notification_id(fullJsonFilePath, hermercuryId)
-            if self.notificationPending:
-                self.save_object_as_json_to_disk(self.entry, fullJsonFilePath, name, hermercuryId)
-                self.notificationObject = self.load_notification_object(fullJsonFilePath)
