@@ -35,6 +35,6 @@ Examples are already present in the [config_template.json](https://github.com/co
 |Key            | Description                                                                                                       |
 |---------------|-------------------------------------------------------------------------------------------------------------------|
 |name           | Arbitrary name of the notification set up.                                                                         |
-|feed           | The URL of the RSS/Atom feed.                                                                                     |
-|search         | A string which matches a sub string of an entries title. RegEx is supported.                                      |
+|feedAddress    | The URL of the RSS/Atom feed.                                                                                     |
+|searchString   | A string which matches a sub string of an entries title. RegEx is supported.                                      |
 |mailTemplate   | Name of the mailTemplate to send on feed entry match.                                                             |
