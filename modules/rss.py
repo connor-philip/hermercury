@@ -25,7 +25,8 @@ class RSS:
 
     def create_notification_id(self, dictionaryObject):
 
-        encodedString = hermercury.helper_functions.string_unicode_handler(dictionaryObject["title"], py3Encoding=True)
+        encodedString = hermercury.helper_functions.string_unicode_handler(dictionaryObject["title"],
+                                                                           py3Encoding=True)
 
         return md5(encodedString).hexdigest()
 
@@ -34,7 +35,11 @@ class RSS:
             dictionaryObject["hermercuryName"] = name
             dictionaryObject["hermercuryId"] = hermercuryId
             with open(file, "w") as SaveFile:
-                json.dump(dictionaryObject, SaveFile, sort_keys=True, indent=4, separators=(',', ': '))
+                json.dump(dictionaryObject,
+                          SaveFile,
+                          sort_keys=True,
+                          indent=4,
+                          separators=(',', ': '))
 
     def compare_notification_id(self, file, compareId):
         fullFilePath = file
