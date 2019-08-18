@@ -1,16 +1,20 @@
 {
-    "emailConfig": {
-        "senderAddress": "",
-        "senderAddressPassword": "",
-        "mailServer": "",
-        "targetAddress": ""
-    },
-    "notificationConfigs": [
+  "emailConfig": {
+    "mailServer": "",
+    "senderAddress": "",
+    "senderAddressPassword": "",
+    "targetAddress": ""
+  },
+  "notificationConfigs": [
+    {
+      "feedAddress": "https://github.com/connor-philip/hermercury/commits/master.atom",
+      "mailTemplate": "hermercury_example.txt",
+      "searches": [
         {
-            "name": "hermercury github",
-            "feed": "https://github.com/connor-philip/hermercury/commits/master.atom",
-            "search": ".+",
-            "mailTemplate": "hermercury_example.txt"
+          "name": "hermercury github",
+          "searchString": ".+"
         }
-    ]
+      ]
+    }
+  ]
 }
