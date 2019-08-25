@@ -101,15 +101,15 @@ def function_switch(args):
 
 
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
-startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15")
-startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process")
-startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly")
+startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15.")
+startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process.")
+startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly.")
 startParser.set_defaults(commandFunction=function_switch)
 
-statusParser = subparsers.add_parser("status", help="Returns the status of the program")
+statusParser = subparsers.add_parser("status", help="Returns the status of the program.")
 statusParser.set_defaults(commandFunction=process_status)
 
-feedExampleParser = subparsers.add_parser("feedExample", help="Shows the available keys in the given feed")
+feedExampleParser = subparsers.add_parser("feedExample", help="Shows the available keys in the given feed.")
 feedExampleParser.add_argument("--feedAddress", type=str, help="Feed address")
 feedExampleParser.set_defaults(commandFunction=return_feed_example)
 
