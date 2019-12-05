@@ -91,6 +91,21 @@ def return_feed_example(args):
         sys.stdout.write("[{:<}]: {:^}\n\n".format(key, value))
 
 
+def test_feeds(args):
+    configs = helper_functions.read_config(CONFIGPATH)
+    notificationConfigs = configs["notificationConfigs"]
+
+    for notificationConfig in notificationConfigs:
+        feed = notificationConfig["feedAddress"]
+
+        print("Trying feed connection for:", feed + "...")
+        RSSInstance = RSS(feed)
+        if RSSInstance.feedContent:
+            print("Connection okay\n")
+        else:
+            print("NO FEED FOUND\n")
+
+
 def function_switch(args):
     if args.foreground:
         start_scheduler(args)
@@ -112,6 +127,10 @@ statusParser.set_defaults(commandFunction=process_status)
 feedExampleParser = subparsers.add_parser("feedExample", help="Shows the available keys in the given feed.")
 feedExampleParser.add_argument("--feedAddress", type=str, help="Feed address")
 feedExampleParser.set_defaults(commandFunction=return_feed_example)
+
+feedTestParser = subparsers.add_parser("testFeeds", help="Tests connections to feeds in the config.")
+feedTestParser.set_defaults(commandFunction=test_feeds)
+
 
 stopParser = subparsers.add_parser("stop", help="Stops Hermercury")
 stopParser.set_defaults(commandFunction=stop_background_process)
