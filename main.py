@@ -29,21 +29,32 @@ def find_and_notify_of_updates():
     for notificationConfig in notificationConfigs:
         feed = RSS(notificationConfig["feedAddress"])
         mailTemplate = notificationConfig["mailTemplate"]
-        for searchConfig in notificationConfig["searches"]:
 
+        for searchConfig in notificationConfig["searches"]:
+            errorInFeed = False
+            wasPreviousError = "Boolean"
             name = searchConfig["name"]
             searchString = searchConfig["searchString"]
             fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
             fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, name)
             match = feed.find_entry_by_title(feed.feedContent, searchString)
 
-            if match is None:
+            if not feed.feedContent:
+                errorInFeed = True
+                mailTemplate = "error_notification.txt"
+                fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
+                match = feed.load_notification_object(fullJsonFilePath)
+                if "hermercuryPreviousError" in match:
+                    wasPreviousError = match["hermercuryPreviousError"]
+                else:
+                    wasPreviousError = False
+            elif match is None:
                 continue
 
             hermercuryId = feed.create_notification_id(match)
             feed.notificationPending = feed.compare_notification_id(fullJsonFilePath, hermercuryId)
-            if feed.notificationPending:
-                feed.save_object_as_json_to_disk(match, fullJsonFilePath, name, hermercuryId)
+            if feed.notificationPending or (not feed.feedContent and wasPreviousError is False):
+                feed.save_object_as_json_to_disk(match, fullJsonFilePath, name, hermercuryId, errorInFeed)
                 notificationObject = feed.load_notification_object(fullJsonFilePath)
                 EmailControlInstance = EmailControl(senderAddress, senderAddressPassword, mailServer, targetAddress)
                 email = EmailControlInstance.build_notification_email(name, fullMailTemplateFilePath, notificationObject)

@@ -30,10 +30,11 @@ class RSS:
 
         return md5(encodedString).hexdigest()
 
-    def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId):
+    def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId, recentError):
         if dictionaryObject:
             dictionaryObject["hermercuryName"] = name
             dictionaryObject["hermercuryId"] = hermercuryId
+            dictionaryObject["hermercuryPreviousError"] = recentError
             with open(file, "w") as SaveFile:
                 json.dump(dictionaryObject,
                           SaveFile,

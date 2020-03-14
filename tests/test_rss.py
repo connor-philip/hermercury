@@ -71,6 +71,7 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
                               "link": "http://test/case/link/",
                               "hermercuryName": self.TestCaseFileName,
                               "hermercuryId": "bb5cea22fe8cb6ac87227f27be3a611d",
+                              "hermercuryPreviousError": False,
                               "summary": "summary!"}
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
 
@@ -82,7 +83,8 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.RSSInstance.save_object_as_json_to_disk(self.Object,
                                                      self.FullFilePath,
                                                      self.TestCaseFileName,
-                                                     self.hermercuryId)
+                                                     self.hermercuryId,
+                                                     False)
 
         with open(self.FullFilePath, "r+") as TestCaseFile:
             TestCaseFileObject = json.load(TestCaseFile)
@@ -94,7 +96,8 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.RSSInstance.save_object_as_json_to_disk(self.EmptyObject,
                                                      self.FullFilePath,
                                                      self.TestCaseFileName,
-                                                     self.hermercuryId)
+                                                     self.hermercuryId,
+                                                     False)
 
         Result = os.path.isfile(self.FullFilePath)
 
@@ -115,7 +118,8 @@ class TestCompareNotificationID(unittest.TestCase):
         self.RSSInstance.save_object_as_json_to_disk(self.Object,
                                                      self.FullFilePath,
                                                      self.TestCaseFileName,
-                                                     self.hermercuryId)
+                                                     self.hermercuryId,
+                                                     False)
 
     def tearDown(self):
         if os.path.isfile(self.FullFilePath):
