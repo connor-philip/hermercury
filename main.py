@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
 
 
-def main():
+def find_and_notify_of_updates():
     configs = helper_functions.read_config(CONFIGPATH)
     notificationConfigs = configs["notificationConfigs"]
     emailConfig = configs["emailConfig"]
@@ -53,7 +53,7 @@ def main():
 def start_scheduler(args):
     frequency = args.frequency
 
-    schedule.every(frequency).minutes.do(main)
+    schedule.every(frequency).minutes.do(find_and_notify_of_updates)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -110,7 +110,7 @@ def function_switch(args):
     if args.foreground:
         start_scheduler(args)
     elif args.onceNow:
-        main()
+        find_and_notify_of_updates()
     else:
         start_background_process(args)
 
