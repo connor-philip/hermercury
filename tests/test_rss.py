@@ -12,49 +12,58 @@ PROJECTDIR = os.path.abspath(os.path.join(CURRENTDIR, os.pardir))
 JSONDIR = os.path.join(PROJECTDIR, "json")
 
 
-class TestFindEntryByTitle(unittest.TestCase):
+class TestFindMatchesByTitle(unittest.TestCase):
 
     def setUp(self):
-        self.RSSInstance = RSS("")
+        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
+                                  "searches": "mockfeedSearch"}
+        self.RSSInstance = RSS(mockNotificationConfig)
         self.TestDict1 = {"title": "Title1"}
         self.TestDict2 = {"title": "Title2"}
         self.TestDict3 = {"title": "Title2", "key": "value"}
         self.TestList = [self.TestDict1, self.TestDict2, self.TestDict3]
 
-    def test_finds_title(self):
-        Result = self.RSSInstance.find_entry_by_title(self.TestList, "Title1")
+    def test_returns_list_of_indexes(self):
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
 
-        self.assertEqual(self.TestDict1, Result)
+        self.assertIsInstance(Result, list)
+        self.assertIsInstance(Result[0], int)
+
+    def test_finds_title(self):
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
+
+        self.assertEqual([0], Result)
 
     def test_ignore_case(self):
-        Result = self.RSSInstance.find_entry_by_title(self.TestList, "tItLe1")
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, "tItLe1")
 
-        self.assertEqual(self.TestDict1, Result)
+        self.assertEqual([0], Result)
 
     def test_no_match_return_none(self):
-        Result = self.RSSInstance.find_entry_by_title(self.TestList, "No Such Title Exists")
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, "No Such Title Exists")
 
         self.assertIsNone(Result)
 
     def test_try_match_non_string(self):
         with self.assertRaises(TypeError):
-            self.RSSInstance.find_entry_by_title(self.TestList, 1)
+            self.RSSInstance.find_matches_by_title(self.TestList, 1)
 
     def test_try_iterate_non_iterable(self):
         with self.assertRaises(TypeError):
-            self.RSSInstance.find_entry_by_title(1, "title")
+            self.RSSInstance.find_matches_by_title(1, "title")
 
-    def test_return_first_found(self):
-        Result = self.RSSInstance.find_entry_by_title(self.TestList, "Title2")
+    def test_returns_all_matches(self):
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title2")
 
-        self.assertEqual(self.TestDict2, Result)
-        self.assertNotEqual(self.TestDict3, Result)
+        self.assertEqual([1, 2], Result)
 
 
 class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 
     def setUp(self):
-        self.RSSInstance = RSS("")
+        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
+                                  "searches": "mockfeedSearch"}
+        self.RSSInstance = RSS(mockNotificationConfig)
         self.jsonDir = JSONDIR
         self.EmptyObject = {}
         self.TestCaseFileName = "test_case_file_name"
@@ -102,7 +111,9 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
 class TestCompareNotificationID(unittest.TestCase):
 
     def setUp(self):
-        self.RSSInstance = RSS("")
+        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
+                                  "searches": "mockfeedSearch"}
+        self.RSSInstance = RSS(mockNotificationConfig)
         self.jsonDir = JSONDIR
         self.TestCaseFileName = "test_case_file_name"
         self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
@@ -146,7 +157,9 @@ class TestCompareNotificationID(unittest.TestCase):
 class TestCreateMatchNotificationId(unittest.TestCase):
 
     def setUp(self):
-        self.RSSInstance = RSS("")
+        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
+                                  "searches": "mockfeedSearch"}
+        self.RSSInstance = RSS(mockNotificationConfig)
         self.TestDict1 = {"title": "Title1"}
 
     def test_string_is_returned(self):

@@ -1,30 +1,40 @@
-import hermercury.helper_functions
-
+from typing import List
 from hashlib import md5
 import feedparser
+import logging
 import json
 import os
 import re
 
 
+logging.basicConfig(level = logging.INFO)
+logger = logging.getLogger("Hermercury")
+
+
 class RSS:
 
-    def __init__(self, feed):
-        self.feed = feed
+    def __init__(self, notificationConfig: dict):
+        self.feedAddress = notificationConfig["feedAddress"]
+        self.feedSearches = notificationConfig["searches"]
 
     def find_entry_by_title(self, searchList, searchString):
         entryMatch = None
 
-        for counter, entry in enumerate(searchList):
+
+    def find_matches_by_title(self, feedContent: str, searchString: str) -> List[int]:
+        matchIndexes = []
+
+        for counter, entry in enumerate(feedContent):
             match = re.search(searchString, entry["title"], re.I)
             if match:
-                entryMatch = searchList[counter]
-                break
+                logger.info(f"Got match for the search: {searchString}")
+                logger.debug(f"match object: {match}")
+                entryMatchIndex = matchIndexes.append(counter)
 
-        return entryMatch
+        return matchIndexes if matchIndexes else None
 
-    def get_feed_content(self, feedAddress: str):
-        return feedparser.parse(feedAddress).entries
+    def get_feed_content(self):
+        return feedparser.parse(self.feedAddress).entries
 
     def create_match_notification_id(self, feedEntry: dict):
         encodedTitle = feedEntry["title"].encode("utf-8")
