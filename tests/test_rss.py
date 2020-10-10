@@ -68,6 +68,13 @@ class TestFindNewMatchesByTitle(unittest.TestCase):
 
         self.assertEqual([self.TestDict1], result)
 
+    def test_hermercury_id_added_to_match(self):
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "Title1", "")
+        matchKeys = result[0].keys()
+        matchContainsHermercuryId = "hermercuryId" in matchKeys
+
+        self.assertTrue(matchContainsHermercuryId)
+
 
 class TestCreateMatchNotificationId(unittest.TestCase):
 

@@ -48,6 +48,7 @@ class RSS:
 
             elif match:
                 logger.info(f"  Found new match {hermercuryId}")
+                entry["hermercuryId"] = hermercuryId
                 newMatches.append(entry)
 
         return newMatches if newMatches else None
