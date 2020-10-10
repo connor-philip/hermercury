@@ -1,7 +1,10 @@
 from hermercury.rss import RSS
+
 import json
 import os
 import unittest
+from hypothesis import given
+from hypothesis.strategies import text
 
 
 CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
@@ -146,6 +149,32 @@ class TestCompareNotificationID(unittest.TestCase):
                                                           self.hermercuryId)
 
         self.assertEqual(Result, True)
+
+
+class TestCreateNotificationId(unittest.TestCase):
+
+    def setUp(self):
+        self.RSSInstance = RSS("")
+        self.TestDict1 = {"title": "Title1"}
+
+    def test_string_is_returned(self):
+        returned_value = self.RSSInstance.create_notification_id(self.TestDict1)
+
+        self.assertIsInstance(returned_value, str)
+
+    def test_notification_id_is_predictable(self):
+        returned_id = self.RSSInstance.create_notification_id(self.TestDict1)
+        expected_id = "b4c0b4ef700c9a34a3b3ea20bd520322"
+
+        self.assertEqual(expected_id, returned_id)
+
+    @given(text())
+    def test_different_inputs_types_do_not_raise_exceptions(self, input):
+        TestFeedEntry = {"title": input}
+        returned_id = self.RSSInstance.create_notification_id(TestFeedEntry)
+
+        self.assertEqual(len(returned_id), 32)
+
 
 
 if __name__ == "__main__":

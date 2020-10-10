@@ -23,12 +23,8 @@ class RSS:
 
         return entryMatch
 
-    def create_notification_id(self, dictionaryObject):
-
-        encodedString = hermercury.helper_functions.string_unicode_handler(dictionaryObject["title"],
-                                                                           py3Encoding=True)
-
-        return md5(encodedString).hexdigest()
+    def create_notification_id(self, feedEntry: dict):
+        return md5(feedEntry["title"]).hexdigest()
 
     def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId, recentError):
         if dictionaryObject:
