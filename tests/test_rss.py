@@ -23,21 +23,21 @@ class TestFindMatchesByTitle(unittest.TestCase):
         self.TestDict3 = {"title": "Title2", "key": "value"}
         self.TestList = [self.TestDict1, self.TestDict2, self.TestDict3]
 
-    def test_returns_list_of_indexes(self):
+    def test_returns_list_of_matches(self):
         Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
 
         self.assertIsInstance(Result, list)
-        self.assertIsInstance(Result[0], int)
+        self.assertIsInstance(Result[0], dict)
 
     def test_finds_title(self):
         Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
 
-        self.assertEqual([0], Result)
+        self.assertEqual(self.TestDict1, Result[0])
 
     def test_ignore_case(self):
         Result = self.RSSInstance.find_matches_by_title(self.TestList, "tItLe1")
 
-        self.assertEqual([0], Result)
+        self.assertEqual(self.TestDict1, Result[0])
 
     def test_no_match_return_none(self):
         Result = self.RSSInstance.find_matches_by_title(self.TestList, "No Such Title Exists")
@@ -55,103 +55,12 @@ class TestFindMatchesByTitle(unittest.TestCase):
     def test_returns_all_matches(self):
         Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title2")
 
-        self.assertEqual([1, 2], Result)
+        self.assertEqual([self.TestDict2, self.TestDict3], Result)
 
+    def test_evaluates_search_string_as_regex(self):
+        Result = self.RSSInstance.find_matches_by_title(self.TestList, ".+")
 
-class TestSaveObjectAsJsonToDisk(unittest.TestCase):
-
-    def setUp(self):
-        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
-                                  "searches": "mockfeedSearch"}
-        self.RSSInstance = RSS(mockNotificationConfig)
-        self.jsonDir = JSONDIR
-        self.EmptyObject = {}
-        self.TestCaseFileName = "test_case_file_name"
-        self.Object = {"summary": "summary!",
-                       "link": "http://test/case/link/",
-                       "title": self.TestCaseFileName}
-        self.hermercuryId = self.RSSInstance.create_match_notification_id(self.Object)
-        self.CompareObject = {"title": self.TestCaseFileName,
-                              "link": "http://test/case/link/",
-                              "hermercuryName": self.TestCaseFileName,
-                              "hermercuryId": "bb5cea22fe8cb6ac87227f27be3a611d",
-                              "hermercuryPreviousError": False,
-                              "summary": "summary!"}
-        self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
-
-    def tearDown(self):
-        if os.path.isfile(self.FullFilePath):
-            os.remove(self.FullFilePath)
-
-    def test_object_is_saved(self):
-        self.RSSInstance.save_object_as_json_to_disk(self.Object,
-                                                     self.FullFilePath,
-                                                     self.TestCaseFileName,
-                                                     self.hermercuryId,
-                                                     False)
-
-        with open(self.FullFilePath, "r+") as TestCaseFile:
-            TestCaseFileObject = json.load(TestCaseFile)
-            TestCaseFile.close()
-
-        self.assertEqual(self.CompareObject, TestCaseFileObject)
-
-    def test_empty_object_is_not_saved(self):
-        self.RSSInstance.save_object_as_json_to_disk(self.EmptyObject,
-                                                     self.FullFilePath,
-                                                     self.TestCaseFileName,
-                                                     self.hermercuryId,
-                                                     False)
-
-        Result = os.path.isfile(self.FullFilePath)
-
-        self.assertEqual(False, Result)
-
-
-class TestCompareNotificationID(unittest.TestCase):
-
-    def setUp(self):
-        mockNotificationConfig = {"feedAddress": "mockFeedAddress",
-                                  "searches": "mockfeedSearch"}
-        self.RSSInstance = RSS(mockNotificationConfig)
-        self.jsonDir = JSONDIR
-        self.TestCaseFileName = "test_case_file_name"
-        self.FullFilePath = self.jsonDir + self.TestCaseFileName + ".json"
-        self.Object = {"summary": "summary!",
-                       "link": "http://test/case/link/",
-                       "title": self.TestCaseFileName}
-        self.hermercuryId = self.RSSInstance.create_match_notification_id(self.Object)
-        self.RSSInstance.save_object_as_json_to_disk(self.Object,
-                                                     self.FullFilePath,
-                                                     self.TestCaseFileName,
-                                                     self.hermercuryId,
-                                                     False)
-
-    def tearDown(self):
-        if os.path.isfile(self.FullFilePath):
-            os.remove(self.FullFilePath)
-
-    def test_returns_false_when_id_matches(self):
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
-                                                          self.hermercuryId)
-
-        self.assertEqual(Result, False)
-
-    def test_returns_true_when_id_does_not_match(self):
-        self.hermercuryId = "changed"
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
-                                                          self.hermercuryId)
-
-        self.assertEqual(Result, True)
-
-    def test_returns_true_when_file_does_not_exist(self):
-        if os.path.isfile(self.FullFilePath):
-            os.remove(self.FullFilePath)
-
-        Result = self.RSSInstance.compare_notification_id(self.FullFilePath,
-                                                          self.hermercuryId)
-
-        self.assertEqual(Result, True)
+        self.assertEqual(self.TestList, Result)
 
 
 class TestCreateMatchNotificationId(unittest.TestCase):
