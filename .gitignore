@@ -1,5 +1,6 @@
 .vagrant
 *.pyc
+.hypothesis/
 config.py
 config.json
 config_backup.json
