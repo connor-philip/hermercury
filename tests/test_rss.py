@@ -90,6 +90,59 @@ class TestCreateMatchNotificationId(unittest.TestCase):
         self.assertEqual(len(returned_id), 32)
 
 
+class TestGetFeedContent(unittest.TestCase):
+
+    def setUp(self):
+        # FeedAddress will typically be a url, however,
+        # we can pass in a string as a mock.
+        mockFeed = """<rss version="2.0">
+                      <channel>
+                      <title>Sample Feed</title>
+                      <item><title>one</title></item>
+                      <item><title>two</title></item>
+                      <item><title>two again</title></item>
+                      </channel>
+                      </rss>"""
+
+        mockNotificationConfig = {"feedAddress": mockFeed,
+                                  "searches": "mockfeedSearch"}
+        self.RSSInstance = RSS(mockNotificationConfig)
+
+
+    def test_list_is_returned(self):
+        returnedValue = self.RSSInstance.get_feed_content()
+
+        self.assertIsInstance(returnedValue, list)
+
+    def test_entries_returned_in_list(self):
+        returnedValue = self.RSSInstance.get_feed_content()
+
+        self.assertEqual(returnedValue[0]["title"], "one")
+        self.assertEqual(returnedValue[1]["title"], "two")
+
+
+class TestFindUpdatess(unittest.TestCase):
+
+    def setUp(self):
+        # FeedAddress will typically be a url, however,
+        # we can pass in a string as a mock.
+        mockFeed = """<rss version="2.0">
+                      <channel>
+                      <title>Sample Feed</title>
+                      <item><title>one</title></item>
+                      <item><title>two</title></item>
+                      <item><title>two again</title></item>
+                      </channel>
+                      </rss>"""
+
+    def test_x(self):
+        pass
+
+    def test_y(self):
+        pass
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -48,7 +48,7 @@ class RSS:
         matches = list(filter(lambda x: re.search(searchString, x["title"], re.I), feedEntries))
         return matches if matches else None
 
-    def get_feed_content(self):
+    def get_feed_content(self) -> list:
         return feedparser.parse(self.feedAddress).entries
 
     def create_match_notification_id(self, feedEntry: dict):
