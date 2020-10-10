@@ -34,23 +34,15 @@ class TestFindEntryByTitle(unittest.TestCase):
     def test_no_match_return_none(self):
         Result = self.RSSInstance.find_entry_by_title(self.TestList, "No Such Title Exists")
 
-        self.assertEqual(None, Result)
+        self.assertIsNone(Result)
 
     def test_try_match_non_string(self):
-        try:
-            Result = self.RSSInstance.find_entry_by_title(self.TestList, 1)
-        except TypeError:
-            Result = TypeError
-
-        self.assertEqual(TypeError, Result)
+        with self.assertRaises(TypeError):
+            self.RSSInstance.find_entry_by_title(self.TestList, 1)
 
     def test_try_iterate_non_iterable(self):
-        try:
-            Result = self.RSSInstance.find_entry_by_title("list", "title")
-        except TypeError:
-            Result = TypeError
-
-        self.assertEqual(TypeError, Result)
+        with self.assertRaises(TypeError):
+            self.RSSInstance.find_entry_by_title(1, "title")
 
     def test_return_first_found(self):
         Result = self.RSSInstance.find_entry_by_title(self.TestList, "Title2")
