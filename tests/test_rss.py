@@ -24,25 +24,25 @@ class TestFindMatchesByTitle(unittest.TestCase):
         self.TestList = [self.TestDict1, self.TestDict2, self.TestDict3]
 
     def test_returns_list_of_matches(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
 
-        self.assertIsInstance(Result, list)
-        self.assertIsInstance(Result[0], dict)
+        self.assertIsInstance(result, list)
+        self.assertIsInstance(result[0], dict)
 
     def test_finds_title(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
 
-        self.assertEqual(self.TestDict1, Result[0])
+        self.assertEqual(self.TestDict1, result[0])
 
     def test_ignore_case(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, "tItLe1")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, "tItLe1")
 
-        self.assertEqual(self.TestDict1, Result[0])
+        self.assertEqual(self.TestDict1, result[0])
 
     def test_no_match_return_none(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, "No Such Title Exists")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, "No Such Title Exists")
 
-        self.assertIsNone(Result)
+        self.assertIsNone(result)
 
     def test_try_match_non_string(self):
         with self.assertRaises(TypeError):
@@ -53,14 +53,14 @@ class TestFindMatchesByTitle(unittest.TestCase):
             self.RSSInstance.find_matches_by_title(1, "title")
 
     def test_returns_all_matches(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, "Title2")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title2")
 
-        self.assertEqual([self.TestDict2, self.TestDict3], Result)
+        self.assertEqual([self.TestDict2, self.TestDict3], result)
 
     def test_evaluates_search_string_as_regex(self):
-        Result = self.RSSInstance.find_matches_by_title(self.TestList, ".+")
+        result = self.RSSInstance.find_matches_by_title(self.TestList, ".+")
 
-        self.assertEqual(self.TestList, Result)
+        self.assertEqual(self.TestList, result)
 
 
 class TestCreateMatchNotificationId(unittest.TestCase):
