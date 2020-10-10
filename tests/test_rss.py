@@ -12,7 +12,7 @@ PROJECTDIR = os.path.abspath(os.path.join(CURRENTDIR, os.pardir))
 JSONDIR = os.path.join(PROJECTDIR, "json")
 
 
-class TestFindMatchesByTitle(unittest.TestCase):
+class TestFindNewMatchesByTitle(unittest.TestCase):
 
     def setUp(self):
         mockNotificationConfig = {"feedAddress": "mockFeedAddress",
@@ -24,43 +24,49 @@ class TestFindMatchesByTitle(unittest.TestCase):
         self.TestList = [self.TestDict1, self.TestDict2, self.TestDict3]
 
     def test_returns_list_of_matches(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "Title1", "")
 
         self.assertIsInstance(result, list)
         self.assertIsInstance(result[0], dict)
 
     def test_finds_title(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title1")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "Title1", "")
 
         self.assertEqual(self.TestDict1, result[0])
 
     def test_ignore_case(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, "tItLe1")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "tItLe1", "")
 
         self.assertEqual(self.TestDict1, result[0])
 
     def test_no_match_return_none(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, "No Such Title Exists")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "No Such Title Exists", "")
 
         self.assertIsNone(result)
 
     def test_try_match_non_string(self):
         with self.assertRaises(TypeError):
-            self.RSSInstance.find_matches_by_title(self.TestList, 1)
+            self.RSSInstance.find_new_matches_by_title(self.TestList, 1, "")
 
     def test_try_iterate_non_iterable(self):
         with self.assertRaises(TypeError):
-            self.RSSInstance.find_matches_by_title(1, "title")
+            self.RSSInstance.find_new_matches_by_title(1, "title", "")
 
     def test_returns_all_matches(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, "Title2")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, "Title2", "")
 
         self.assertEqual([self.TestDict2, self.TestDict3], result)
 
     def test_evaluates_search_string_as_regex(self):
-        result = self.RSSInstance.find_matches_by_title(self.TestList, ".+")
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, ".+", "")
 
         self.assertEqual(self.TestList, result)
+
+    def test_search_stops_when_last_known_id_found(self):
+        lastId = self.RSSInstance.create_match_notification_id(self.TestDict2)
+        result = self.RSSInstance.find_new_matches_by_title(self.TestList, ".+", lastId)
+
+        self.assertEqual([self.TestDict1], result)
 
 
 class TestCreateMatchNotificationId(unittest.TestCase):
@@ -121,7 +127,7 @@ class TestGetFeedContent(unittest.TestCase):
         self.assertEqual(returnedValue[1]["title"], "two")
 
 
-class TestFindUpdatess(unittest.TestCase):
+class TestFindUpdates(unittest.TestCase):
 
     def setUp(self):
         # FeedAddress will typically be a url, however,

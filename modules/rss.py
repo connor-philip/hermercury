@@ -7,8 +7,6 @@ import os
 import re
 
 
-
-logging.basicConfig(level = logging.INFO)
 logger = logging.getLogger("Hermercury")
 
 
@@ -38,15 +36,22 @@ class RSS:
                 matchIds.add(hermercuryId)
                 logger.info(f"  Found match with id: {hermercuryId}")
 
+    def find_new_matches_by_title(self, feedEntries: list, searchString: str, lastMatchedId: str) -> List[dict]:
+        newMatches = []
 
-            newMatches = list(matchIds - set(previouslyMatchedIds))
-            logger.info(f"   {len(newMatches)} new matches")
-            logger.debug(f"  New matches: {newMatches}")
+        for entry in feedEntries:
+            hermercuryId = self.create_match_notification_id(entry)
+            match = re.search(searchString, entry["title"], re.I)
+            if match and hermercuryId == lastMatchedId:
+                logger.info(f"  Found last known match {hermercuryId}")
+                break
 
+            elif match:
+                logger.info(f"  Found new match {hermercuryId}")
+                newMatches.append(entry)
 
-    def find_matches_by_title(self, feedEntries: list, searchString: str) -> List[dict]:
-        matches = list(filter(lambda x: re.search(searchString, x["title"], re.I), feedEntries))
-        return matches if matches else None
+        return newMatches if newMatches else None
+
 
     def get_feed_content(self) -> list:
         return feedparser.parse(self.feedAddress).entries
