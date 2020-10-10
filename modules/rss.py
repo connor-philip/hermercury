@@ -10,7 +10,6 @@ class RSS:
 
     def __init__(self, feed):
         self.feed = feed
-        self.feedContent = feedparser.parse(self.feed).entries
 
     def find_entry_by_title(self, searchList, searchString):
         entryMatch = None
@@ -23,8 +22,12 @@ class RSS:
 
         return entryMatch
 
-    def create_notification_id(self, feedEntry: dict):
-        return md5(feedEntry["title"]).hexdigest()
+    def get_feed_content(self, feedAddress: str):
+        return feedparser.parse(feedAddress).entries
+
+    def create_match_notification_id(self, feedEntry: dict):
+        encodedTitle = feedEntry["title"].encode("utf-8")
+        return md5(encodedTitle).hexdigest()
 
     def save_object_as_json_to_disk(self, dictionaryObject, file, name, hermercuryId, recentError):
         if dictionaryObject:

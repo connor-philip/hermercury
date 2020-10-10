@@ -61,7 +61,7 @@ class TestSaveObjectAsJsonToDisk(unittest.TestCase):
         self.Object = {"summary": "summary!",
                        "link": "http://test/case/link/",
                        "title": self.TestCaseFileName}
-        self.hermercuryId = self.RSSInstance.create_notification_id(self.Object)
+        self.hermercuryId = self.RSSInstance.create_match_notification_id(self.Object)
         self.CompareObject = {"title": self.TestCaseFileName,
                               "link": "http://test/case/link/",
                               "hermercuryName": self.TestCaseFileName,
@@ -109,7 +109,7 @@ class TestCompareNotificationID(unittest.TestCase):
         self.Object = {"summary": "summary!",
                        "link": "http://test/case/link/",
                        "title": self.TestCaseFileName}
-        self.hermercuryId = self.RSSInstance.create_notification_id(self.Object)
+        self.hermercuryId = self.RSSInstance.create_match_notification_id(self.Object)
         self.RSSInstance.save_object_as_json_to_disk(self.Object,
                                                      self.FullFilePath,
                                                      self.TestCaseFileName,
@@ -143,19 +143,19 @@ class TestCompareNotificationID(unittest.TestCase):
         self.assertEqual(Result, True)
 
 
-class TestCreateNotificationId(unittest.TestCase):
+class TestCreateMatchNotificationId(unittest.TestCase):
 
     def setUp(self):
         self.RSSInstance = RSS("")
         self.TestDict1 = {"title": "Title1"}
 
     def test_string_is_returned(self):
-        returned_value = self.RSSInstance.create_notification_id(self.TestDict1)
+        returned_value = self.RSSInstance.create_match_notification_id(self.TestDict1)
 
         self.assertIsInstance(returned_value, str)
 
     def test_notification_id_is_predictable(self):
-        returned_id = self.RSSInstance.create_notification_id(self.TestDict1)
+        returned_id = self.RSSInstance.create_match_notification_id(self.TestDict1)
         expected_id = "b4c0b4ef700c9a34a3b3ea20bd520322"
 
         self.assertEqual(expected_id, returned_id)
@@ -163,7 +163,7 @@ class TestCreateNotificationId(unittest.TestCase):
     @given(text())
     def test_different_inputs_types_do_not_raise_exceptions(self, input):
         TestFeedEntry = {"title": input}
-        returned_id = self.RSSInstance.create_notification_id(TestFeedEntry)
+        returned_id = self.RSSInstance.create_match_notification_id(TestFeedEntry)
 
         self.assertEqual(len(returned_id), 32)
 
