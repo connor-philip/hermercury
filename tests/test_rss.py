@@ -1,8 +1,9 @@
 from hermercury.rss import RSS
 
+import unittest
+import shutil
 import json
 import os
-import unittest
 from hypothesis import given
 from hypothesis.strategies import text
 
@@ -147,13 +148,41 @@ class TestFindUpdates(unittest.TestCase):
                       <item><title>two again</title></item>
                       </channel>
                       </rss>"""
+        mockfeedSearch = {"name": "test_search_one",
+                          "searchString": "one"}
+        mockfeedSearch = {"name": "test_search_two",
+                          "searchString": "two"}
+        mockNotificationConfig = {"feedAddress": mockFeed,
+                                  "searches": [mockfeedSearch]}
+        self.RSSInstance = RSS(mockNotificationConfig)
 
-    def test_x(self):
-        pass
+        CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
+        self.testJsonDir = os.path.join(CURRENTDIR, "test_json")
 
-    def test_y(self):
-        pass
+    def tearDown(self):
+         if os.path.exists(self.testJsonDir):
+            shutil.rmtree(self.testJsonDir)
 
+    def test_list_is_returned(self):
+        returnedValue = self.RSSInstance.find_updates(self.testJsonDir)
+
+        self.assertIsInstance(returnedValue, list)
+
+    def test_expected_matches_are_returned(self):
+        returnedValue = self.RSSInstance.find_updates(self.testJsonDir)
+        returnedTitles = [i["title"] for i in returnedValue]
+        expectedTitles = ["two", "two again"]
+
+        self.assertEqual(returnedTitles, expectedTitles)
+
+
+
+    def test_only_new_matches_are_returned(self):
+        self.RSSInstance.find_updates(self.testJsonDir)
+        returnedValue = self.RSSInstance.find_updates(self.testJsonDir)
+        expectedTitles = []
+
+        self.assertEqual(returnedValue, expectedTitles)
 
 
 
