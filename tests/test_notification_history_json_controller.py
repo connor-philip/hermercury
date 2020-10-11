@@ -40,7 +40,6 @@ class TestNotificationHistoryInit(unittest.TestCase):
         self.assertEqual(loadedJson, testJson)
 
 
-
 class TestFormFileName(unittest.TestCase):
 
     def setUp(self):
@@ -109,6 +108,27 @@ class TestGetLastMatchedId(unittest.TestCase):
         returnedId = self.nh.get_last_matched_id()
 
         self.assertEqual(returnedId, "test_id")
+
+
+class TestUpdateLastMatchedId(unittest.TestCase):
+
+    def setUp(self):
+        CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
+        self.testJsonDir = os.path.join(CURRENTDIR, "test_json")
+        searchConfig = {"name": "test name", "searchString": "test search"}
+        self.nh = nhjc.NotificationHistory(searchConfig, self.testJsonDir)
+
+    def tearDown(self):
+         if os.path.exists(self.testJsonDir):
+            shutil.rmtree(self.testJsonDir)
+
+
+    def test_json_is_updated_as_expected(self):
+        testId = "test_id"
+        self.nh.update_last_matched_id(testId)
+        returnedId = self.nh._load_notification_json()["lastNotificationId"]
+
+        self.assertEqual(returnedId, testId)
 
 
 if __name__ == "__main__":

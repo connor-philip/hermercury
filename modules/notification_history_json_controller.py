@@ -25,8 +25,10 @@ class NotificationHistory:
         return self._load_notification_json()["lastNotificationId"]
 
 
-    def update_last_matched_id(self):
-        pass
+    def update_last_matched_id(self, hermercuryId: str) -> None:
+        notificiationHistory = self._load_notification_json()
+        notificiationHistory["lastNotificationId"] = hermercuryId
+        self._write_notification_json(notificiationHistory)
 
     def add_error_count(self):
         pass
