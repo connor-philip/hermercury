@@ -148,12 +148,12 @@ class TestFindUpdates(unittest.TestCase):
                       <item><title>two again</title></item>
                       </channel>
                       </rss>"""
-        mockfeedSearch = {"name": "test_search_one",
+        mockfeedSearchOne = {"name": "test_search_one",
                           "searchString": "one"}
-        mockfeedSearch = {"name": "test_search_two",
+        mockfeedSearchTwo = {"name": "test_search_two",
                           "searchString": "two"}
         mockNotificationConfig = {"feedAddress": mockFeed,
-                                  "searches": [mockfeedSearch]}
+                                  "searches": [mockfeedSearchOne, mockfeedSearchTwo]}
         self.RSSInstance = RSS(mockNotificationConfig)
 
         CURRENTDIR = os.path.dirname(os.path.abspath(__file__))
@@ -170,11 +170,17 @@ class TestFindUpdates(unittest.TestCase):
 
     def test_expected_matches_are_returned(self):
         returnedValue = self.RSSInstance.find_updates(self.testJsonDir)
-        returnedTitles = [i["title"] for i in returnedValue]
-        expectedTitles = ["two", "two again"]
+        returnedTitles = [i["searchMatch"]["title"] for i in returnedValue]
+        expectedTitles = ["one", "two", "two again"]
 
         self.assertEqual(returnedTitles, expectedTitles)
 
+    def test_search_name_is_returned_alongside_match(self):
+        returnedValue = self.RSSInstance.find_updates(self.testJsonDir)
+        returnedNames = [i["name"] for i in returnedValue]
+        expectedNames = ["test_search_one", "test_search_two", "test_search_two"]
+
+        self.assertEqual(returnedNames, expectedNames)
 
 
     def test_only_new_matches_are_returned(self):

@@ -9,5 +9,5 @@ setup(name="hermercury",
                   "hermercury.rss",
                   "hermercury.process_control",
                   "hermercury.helper_functions",
-                  "hermercury.notification_history_json_controller"],
+                  "hermercury.notification_history_json_controller"]
       )

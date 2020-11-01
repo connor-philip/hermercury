@@ -42,6 +42,7 @@ class RSS:
             logger.info(f"  Setting last match id to: {mostRecentMatch}")
             nh.update_last_matched_id(mostRecentMatch)
 
+            searchMatches = [{"name": searchConfig["name"], "searchMatch": searchMatch} for searchMatch in searchMatches]
             feedMatches.extend(searchMatches)
 
 
@@ -65,7 +66,6 @@ class RSS:
                 newMatches.append(entry)
 
         return newMatches if newMatches else None
-
 
     def get_feed_content(self) -> list:
         return feedparser.parse(self.feedAddress).entries
