@@ -41,7 +41,7 @@ def find_and_notify_of_updates():
                 EmailControlInstance = EmailControl(senderAddress, senderAddressPassword, mailServer, targetAddress)
                 email = EmailControlInstance.build_notification_email(subjectName, fullMailTemplateFilePath, searchMatch)
 
-                logger.info(f"Email: {email}")
+                logger.debug(f"Email: {email}")
                 # EmailControlInstance.send_email(email)
         else:
             logger.info(f"No feedUpdates in {notificationConfig['feedAddress']}")

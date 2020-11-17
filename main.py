@@ -2,8 +2,10 @@ from hermercury.process_control import ProcessControl
 from hermercury import helper_functions
 from hermercury.notify import EmailControl
 from hermercury.rss import RSS
+import platform
 import schedule
 import argparse
+import logging
 import time
 import sys
 import os
@@ -11,6 +13,8 @@ import os
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
 PIDFILE = os.path.join(PROJECTDIR, "hermercury.pid")
+NOTIFICATIONHISTORYJSONPATH = os.path.join(PROJECTDIR, "notification_history_json")
+logger = logging.getLogger("Hermercury")
 
 parser = argparse.ArgumentParser(prog="command")
 subparsers = parser.add_subparsers(help='sub-command help')
@@ -27,38 +31,27 @@ def find_and_notify_of_updates():
     targetAddress = emailConfig["targetAddress"]
 
     for notificationConfig in notificationConfigs:
-        feed = RSS(notificationConfig["feedAddress"])
+        logger.info(f"")
+        feed = RSS(notificationConfig)
+        feedUpdates = feed.find_updates(NOTIFICATIONHISTORYJSONPATH)
         mailTemplate = notificationConfig["mailTemplate"]
+        fullMailTemplateFilePath = os.path.join(PROJECTDIR, "mail_templates", mailTemplate)
 
-        for searchConfig in notificationConfig["searches"]:
-            errorInFeed = False
-            wasPreviousError = "Boolean"
-            name = searchConfig["name"]
-            searchString = searchConfig["searchString"]
-            fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
-            fullJsonFilePath = "%s/json/%s.json" % (PROJECTDIR, name)
-            match = feed.find_entry_by_title(feed.feedContent, searchString)
+        if feedUpdates:
+            logger.info(f"Starting to send mail for matches in {notificationConfig['feedAddress']}")
+            logger.info(f"Using mail template: {fullMailTemplateFilePath}")
+            for update in feedUpdates:
+                subjectName = update["name"]
+                searchMatch = update["searchMatch"]
 
-            if not feed.feedContent:
-                errorInFeed = True
-                mailTemplate = "error_notification.txt"
-                fullMailTemplateFilePath = "%s/mail_templates/%s" % (PROJECTDIR, mailTemplate)
-                match = feed.load_notification_object(fullJsonFilePath)
-                if "hermercuryPreviousError" in match:
-                    wasPreviousError = match["hermercuryPreviousError"]
-                else:
-                    wasPreviousError = False
-            elif match is None:
-                continue
-
-            hermercuryId = feed.create_notification_id(match)
-            feed.notificationPending = feed.compare_notification_id(fullJsonFilePath, hermercuryId)
-            if feed.notificationPending or (not feed.feedContent and wasPreviousError is False):
-                feed.save_object_as_json_to_disk(match, fullJsonFilePath, name, hermercuryId, errorInFeed)
-                notificationObject = feed.load_notification_object(fullJsonFilePath)
                 EmailControlInstance = EmailControl(senderAddress, senderAddressPassword, mailServer, targetAddress)
-                email = EmailControlInstance.build_notification_email(name, fullMailTemplateFilePath, notificationObject)
+                email = EmailControlInstance.build_notification_email(subjectName, fullMailTemplateFilePath, searchMatch)
+
+                logger.debug(f"Email: {email}")
                 EmailControlInstance.send_email(email)
+        else:
+            logger.info(f"No feedUpdates in {notificationConfig['feedAddress']}")
+            continue
 
 
 def start_scheduler(args):
@@ -73,6 +66,7 @@ def start_scheduler(args):
 def start_background_process(args):
     frequency = str(args.frequency)
     pythonExePath = helper_functions.find_python_executable()
+    # pythonExePath = f"python{platform.python_version()}"
     userMessage = ProcessControl(PIDFILE).create_process([pythonExePath, os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
     sys.stdout.write("{}\n".format(userMessage))
 
@@ -121,6 +115,7 @@ def function_switch(args):
     if args.foreground:
         start_scheduler(args)
     elif args.onceNow:
+        logging.basicConfig(level = logging.INFO)
         find_and_notify_of_updates()
     else:
         start_background_process(args)

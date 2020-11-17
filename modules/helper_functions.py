@@ -25,11 +25,12 @@ def string_unicode_handler(inputString, py3Encoding=False):
 
 def find_python_executable():
     PY3 = sys.version_info[0] == 3
+    pyVersion = f"python{sys.version_info[0]}.{sys.version_info[1]}"
     linux = "linux" in sys.platform
     pythonDir = os.path.dirname(sys.executable)
 
     if PY3 and linux:
-        pyPath = os.path.join(pythonDir, "python3")
+        pyPath = os.path.join(pythonDir, pyVersion)
     else:
         pyPath = os.path.join(pythonDir, "python")
 
