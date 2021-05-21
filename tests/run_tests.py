@@ -7,4 +7,6 @@ loader = unittest.TestLoader()
 suite = loader.discover(DIRPATH)
 
 testRunner = unittest.runner.TextTestRunner()
-testRunner.run(suite)
+
+if __name__ == "__main__":
+    testRunner.run(suite)

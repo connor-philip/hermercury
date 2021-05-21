@@ -2,8 +2,8 @@ from hermercury.process_control import ProcessControl
 from hermercury import helper_functions
 from hermercury.notify import EmailControl
 from hermercury.rss import RSS
+from tests.run_tests import testRunner, suite
 
-import platform
 import schedule
 import argparse
 import logging
@@ -68,7 +68,6 @@ def start_scheduler(args):
 def start_background_process(args):
     frequency = str(args.frequency)
     pythonExePath = helper_functions.find_python_executable()
-    # pythonExePath = f"python{platform.python_version()}"
     userMessage = ProcessControl(PIDFILE).create_process([pythonExePath, os.path.abspath(__file__), "start", "-f", frequency, "--foreground"])
     sys.stdout.write("{}\n".format(userMessage))
 
@@ -87,8 +86,12 @@ def process_status(args):
         sys.stdout.write("No hermercury process running\n")
 
 
+def run_unittests(args):
+    testRunner.run(suite)
+
 def function_switch(args):
     if args.foreground:
+        logging.basicConfig(level = logging.INFO)
         start_scheduler(args)
     elif args.onceNow:
         logging.basicConfig(level = logging.INFO)
@@ -108,6 +111,9 @@ statusParser.set_defaults(commandFunction=process_status)
 
 stopParser = subparsers.add_parser("stop", help="Stops Hermercury")
 stopParser.set_defaults(commandFunction=stop_background_process)
+
+statusParser = subparsers.add_parser("runUnitTests", help="Run hermercury unittests.")
+statusParser.set_defaults(commandFunction=run_unittests)
 
 if __name__ == "__main__":
     args = parser.parse_args()
