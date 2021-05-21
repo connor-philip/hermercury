@@ -2,6 +2,7 @@ from hermercury.process_control import ProcessControl
 from hermercury import helper_functions
 from hermercury.notify import EmailControl
 from hermercury.rss import RSS
+
 import platform
 import schedule
 import argparse
@@ -9,6 +10,7 @@ import logging
 import time
 import sys
 import os
+
 
 PROJECTDIR = os.path.dirname(os.path.abspath(__file__))
 CONFIGPATH = os.path.join(PROJECTDIR, "config.json")
