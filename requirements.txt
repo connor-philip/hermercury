@@ -1,4 +1,5 @@
 feedparser
+hypothesis
 schedule
 psutil
 six
