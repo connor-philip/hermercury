@@ -1,13 +1,19 @@
+# Tools
 .vagrant
 *.pyc
 .hypothesis/
+
+# Hermercury
 config.py
 config.json
 config_backup.json
 config_test.json
+
 hermercury.pid
+
 json/*.json
-mail_templates/*.txt
 notification_history_json/
+
+mail_templates/*.txt
 !mail_templates/hermercury_example.txt
 !mail_templates/error_notification.txt
