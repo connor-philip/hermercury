@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  app:
+    container_name: hermercury_app
+    build: .
+    volumes:
+      - ./notification_history_json:/app/notification_history_json
+  tests:
+    container_name: hermercury_tests
+    build: .
+    command: runUnitTests
+

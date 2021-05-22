@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 
 ENTRYPOINT ["python", "main.py"]
-CMD ["start", \
+CMD ["start",            \
      "--foreground",     \
-     "--frequency=15"     \
+     "--frequency=15"    \
 ]
