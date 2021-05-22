@@ -90,7 +90,9 @@ def run_unittests(args):
     testRunner.run(suite)
 
 def function_switch(args):
-    logging.basicConfig(level=logging.getLevelName(args.verbosity))
+    logging.basicConfig(format="%(asctime)s - %(message)s",
+                        datefmt="%Y.%m.%d %I:%M:%S",
+                        level=logging.getLevelName(args.verbosity))
     if args.foreground:
         start_scheduler(args)
     elif args.onceNow:
