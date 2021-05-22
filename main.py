@@ -90,11 +90,10 @@ def run_unittests(args):
     testRunner.run(suite)
 
 def function_switch(args):
+    logging.basicConfig(level=logging.getLevelName(args.verbosity))
     if args.foreground:
-        logging.basicConfig(level = logging.INFO)
         start_scheduler(args)
     elif args.onceNow:
-        logging.basicConfig(level = logging.INFO)
         find_and_notify_of_updates()
     else:
         start_background_process(args)
@@ -102,6 +101,7 @@ def function_switch(args):
 
 startParser = subparsers.add_parser("start", help="Starts Hermercury")
 startParser.add_argument("-f", "--frequency", type=int, default=15, help="Sets the frequency at which Hermercury should run. In minutes. Default set to 15.")
+startParser.add_argument("-v", "--verbosity", type=str, default="ERROR", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Verbosity of Hermercury.")
 startParser.add_argument("--foreground", action="store_true", help="Starts Hermercury in the foreground. Does not change the currently running process.")
 startParser.add_argument("--onceNow", action="store_true", help="Starts Hermercury in the foreground to run once immediatly.")
 startParser.set_defaults(commandFunction=function_switch)
